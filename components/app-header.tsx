@@ -37,7 +37,7 @@ export default function AppHeader() {
           return (
             <Link href={item.url} key={index}>
               <Button
-                className={`h-full! w-32 rounded-none hover:bg-button-header/70 ${isActive && "bg-button-header/50"}`}
+                className={`h-full! w-32 rounded-none bg-header hover:bg-button-header/70 ${isActive && "bg-button-header/50"}`}
               >
                 {item.label}
               </Button>
