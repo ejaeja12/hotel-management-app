@@ -1,0 +1,82 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Get a free hosted Postgres database in seconds: `npx create-db`
+
+enum RoomStatus {
+  inhouse
+  available
+  reserve
+}
+
+enum ActivationStatus {
+  active
+  nonactive
+}
+
+enum Prefix {
+  Mr
+  Mrs
+  Ms
+}
+
+enum IdentificationType {
+  passport
+  ktp
+}
+
+model RoomType {
+  id        String   @id
+  name      String
+  room      Room[]
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@map("roomType")
+}
+
+model Room {
+  id        String     @id
+  name      String
+  typeId    String
+  roomType  RoomType   @relation(fields: [typeId], references: [id], onDelete: Cascade)
+  price     Int
+  status    RoomStatus @default(available)
+  createdAt DateTime   @default(now())
+  updatedAt DateTime   @updatedAt
+
+  @@map("room")
+}
+
+model Guest {
+  id                   String             @id
+  prefix               Prefix
+  name                 String
+  phone                String
+  identificationNumber String
+  identificationType   IdentificationType
+  createdAt            DateTime           @default(now())
+  updatedAt            DateTime           @updatedAt
+
+  @@map("guest")
+}
+
+model ExtraCharge {
+  id        String           @id
+  name      String
+  price     Int
+  status    ActivationStatus @default(active)
+  createdAt DateTime         @default(now())
+  updatedAt DateTime         @updatedAt
+
+  // @@index([userId])
+  // @@map("account")
+  @@map("extraCharge")
+}
+
+model BookingType {
+  id   String @id
+  name String
+
+  @@map("bookingType")
+}

@@ -1,5 +1,5 @@
 import { Geist, Geist_Mono } from "next/font/google"
-
+import AppHeader from "@/components/app-header"
 import "./globals.css"
 import { ThemeProvider } from "@/components/theme-provider"
 import { TooltipProvider } from "@/components/ui/tooltip"
@@ -30,7 +30,10 @@ export default function RootLayout({
     >
       <body>
         <ThemeProvider>
-          <TooltipProvider>{children}</TooltipProvider>
+          <TooltipProvider>
+            <AppHeader></AppHeader>
+            <div className="mt-below-header w-full">{children}</div>
+          </TooltipProvider>
         </ThemeProvider>
       </body>
     </html>

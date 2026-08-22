@@ -1,6 +1,8 @@
 import { Button } from "@/components/ui/button"
+import { redirect, RedirectType } from "next/navigation"
 
 export default function Page() {
+  redirect("/calendar", RedirectType.replace)
   return (
     <div className="flex min-h-svh p-6">
       <div className="flex max-w-md min-w-0 flex-col gap-4 text-sm leading-loose">
