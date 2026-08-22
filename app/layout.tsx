@@ -37,14 +37,7 @@ export default function RootLayout({
     >
       <body>
         <ThemeProvider>
-          <TooltipProvider>
-            <AppHeader></AppHeader>
-            <Separator
-              orientation="horizontal"
-              className={"border border-b-foreground"}
-            ></Separator>
-            <div className="mt-below-header w-full">{children}</div>
-          </TooltipProvider>
+          <TooltipProvider>{children}</TooltipProvider>
         </ThemeProvider>
       </body>
     </html>
