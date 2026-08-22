@@ -70,7 +70,7 @@ export default function CalendarReservation() {
       {
         id: 2,
         text: "Ms, Jane Doe",
-        start: new DayPilot.Date("2022-08-23"),
+        start: new DayPilot.Date("2026-08-15"),
         end: new DayPilot.Date("2026-08-23"),
         resource: "R2",
         barColor: "#000000",
