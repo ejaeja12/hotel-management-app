@@ -21,7 +21,7 @@ import {
 export default function UserNav() {
   return (
     <div className="flex items-center justify-between gap-5 py-5">
-      <div className="flex flex-col justify-center text-background">
+      <div className="flex flex-col justify-center text-text-header">
         <span className="text-right text-[0.9rem] font-semibold">
           User bin User
         </span>

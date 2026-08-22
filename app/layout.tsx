@@ -3,6 +3,7 @@ import AppHeader from "@/components/app-header"
 import "./globals.css"
 import { ThemeProvider } from "@/components/theme-provider"
 import { TooltipProvider } from "@/components/ui/tooltip"
+import { Separator } from "@/components/ui/separator"
 import { cn } from "@/lib/utils"
 
 const geist = Geist({ subsets: ["latin"], variable: "--font-sans" })
@@ -32,6 +33,10 @@ export default function RootLayout({
         <ThemeProvider>
           <TooltipProvider>
             <AppHeader></AppHeader>
+            <Separator
+              orientation="horizontal"
+              className={"border border-b-foreground"}
+            ></Separator>
             <div className="mt-below-header w-full">{children}</div>
           </TooltipProvider>
         </ThemeProvider>

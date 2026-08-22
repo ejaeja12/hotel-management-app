@@ -48,6 +48,9 @@
   /* custom  */
   --height-nav-header: calc(var(--spacing) * 14);
   --spacing-below-header: var(--height-nav-header);
+  --color-header: oklch(0.205 0 0);
+  --color-text-header: oklch(1 0 0);
+  --color-button-header: oklch(0.556 0 0);
 }
 
 :root {

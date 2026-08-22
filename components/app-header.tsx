@@ -27,9 +27,9 @@ export default function AppHeader() {
   const pathname = usePathname()
 
   return (
-    <header className="fixed top-0 z-30 flex h-nav-header w-full bg-accent-foreground">
+    <header className="fixed top-0 z-30 flex h-nav-header w-full bg-header">
       {/* nav */}
-      <div className="flex w-full justify-start bg-accent-foreground text-background">
+      <div className="flex w-full justify-start bg-header text-text-header">
         {navUrl.map((item, index) => {
           const prefix = "/" + item.url.split("/")[1]
           const isActive = pathname.startsWith(prefix)
@@ -37,7 +37,7 @@ export default function AppHeader() {
           return (
             <Link href={item.url} key={index}>
               <Button
-                className={`h-full! w-32 rounded-none hover:bg-muted-foreground/70 ${isActive && "bg-muted-foreground/50"}`}
+                className={`h-full! w-32 rounded-none hover:bg-button-header/70 ${isActive && "bg-button-header/50"}`}
               >
                 {item.label}
               </Button>
@@ -46,7 +46,7 @@ export default function AppHeader() {
         })}
       </div>
       {/* user */}
-      <div className="row-span-2 flex w-full items-center justify-end bg-accent-foreground px-8 py-2">
+      <div className="row-span-2 flex w-full items-center justify-end bg-header px-8 py-2">
         <UserNav></UserNav>
       </div>
     </header>
