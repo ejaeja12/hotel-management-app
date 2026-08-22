@@ -2,12 +2,23 @@
 
 import { useState, useEffect } from "react"
 import { DayPilot, DayPilotScheduler } from "@daypilot/daypilot-lite-react"
-import "@/app/scheduler_diagonal.css"
+import { useTheme } from "next-themes"
+import "@/components/css/scheduler_dark.css"
+import "@/components/css/scheduler_green.css"
 
 // Source : https://code.daypilot.org/79813/react-scheduler-with-horizontal-timeline-open-source
 
+const colorSchedule = {
+  BLUE: "#2563EB",
+  GREEN: "#059669",
+  PURPLE: "#7C3AED",
+  RED: "#DC2626",
+  ORANGE: "#EA580C",
+}
+
 export default function CalendarReservation() {
   const [scheduler, setScheduler] = useState<DayPilot.Scheduler>()
+  const { resolvedTheme } = useTheme()
 
   useEffect(() => {
     if (!scheduler) {
@@ -64,26 +75,33 @@ export default function CalendarReservation() {
         id: 1,
         text: "Mr. Jhon Doe",
         start: sampleStart.addHours(10),
-        end: sampleStart.addHours(12),
+        end: sampleStart.addDays(2),
         resource: "R1",
+        backColor: colorSchedule.BLUE,
       },
       {
         id: 2,
         text: "Ms, Jane Doe",
-        start: new DayPilot.Date("2026-08-15"),
-        end: new DayPilot.Date("2026-08-23"),
+        start: sampleStart.addDays(-4),
+        end: sampleStart.addDays(-1),
         resource: "R2",
-        barColor: "#000000",
-        barBackColor: "#000000",
+        backColor: colorSchedule.GREEN,
       },
       {
         id: 3,
         text: "Mrs. June Doe",
         start: sampleStart.addHours(10),
-        end: sampleStart.addHours(11),
+        end: sampleStart.addDays(+4),
         resource: "R2",
-        barColor: "#38761d",
-        barBackColor: "#93c47d",
+        backColor: colorSchedule.RED,
+      },
+      {
+        id: 4,
+        text: "Mrs. June Doe",
+        start: sampleStart.addDays(-9),
+        end: sampleStart.addDays(-3),
+        resource: "R4",
+        backColor: colorSchedule.PURPLE,
       },
     ]
   })
@@ -99,13 +117,14 @@ export default function CalendarReservation() {
       cellWidth={100}
       eventHeight={60}
       days={days}
+      theme={resolvedTheme === "dark" ? "scheduler_dark" : "scheduler_green"}
       eventDeleteHandling={"Disabled"}
       eventMoveHandling={"Disabled"}
       eventClickHandling={"Enabled"}
       eventResizeHandling={"Update"}
       onEventClick={(e) => alert(e.e.text())}
       onEventDeleted={onEventDeleted}
-
+      durationBarVisible={false}
       onEventMoved={onEventMoved}
       onEventResized={onEventResized}
       onTimeRangeSelected={onTimeRangeSelected}

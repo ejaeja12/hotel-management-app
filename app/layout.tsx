@@ -1,6 +1,6 @@
 import { Geist, Geist_Mono } from "next/font/google"
 import AppHeader from "@/components/app-header"
-import "./globals.css"
+import "@/components/css/globals.css"
 import { ThemeProvider } from "@/components/theme-provider"
 import { TooltipProvider } from "@/components/ui/tooltip"
 import { Separator } from "@/components/ui/separator"
@@ -12,6 +12,12 @@ const fontMono = Geist_Mono({
   subsets: ["latin"],
   variable: "--font-mono",
 })
+
+export const metadata = {
+  icons: {
+    icon: "/favicon.ico",
+  },
+}
 
 export default function RootLayout({
   children,
