@@ -4,20 +4,20 @@ https://themes.daypilot.org/scheduler/theme/hgyafm
 Theme Designer Version: 2026.08.02.60280
 */
 .scheduler_dark_main:not(.default) {
-  --dp-scheduler-border-color: #767676;
+  --dp-scheduler-border-color: rgba(255, 255, 255, 0.104);
   --dp-scheduler-border-inner-color: var(--dp-scheduler-border-color);
   --dp-scheduler-font-family:
     -apple-system, system-ui, BlinkMacSystemFont, "Segoe UI", Roboto,
     "Helvetica Neue", Arial, sans-serif;
   --dp-scheduler-font-size: 13px;
-  --dp-scheduler-header-color: #e2e2e2;
-  --dp-scheduler-header-bg-color: #353333;
+  --dp-scheduler-header-color: #e2e2e2fb;
+  --dp-scheduler-header-bg-color: rgba(255, 255, 255, 0.052);
   --dp-scheduler-message-padding: 10px;
   --dp-scheduler-message-bg-color: #ffa216;
   --dp-scheduler-message-color: #ffffff;
-  --dp-scheduler-grid-line-color: #918e8e;
+  --dp-scheduler-grid-line-color: rgba(255, 255, 255, 0.161);
   --dp-scheduler-event-color: #eaeaea;
-  --dp-scheduler-event-border-color: #706e6e;
+  --dp-scheduler-event-border-color: rgba(255, 255, 255, 0.344);
   --dp-scheduler-event-border-radius: 14px;
   --dp-scheduler-event-padding: 10px;
   --dp-scheduler-event-bar-bg-color: #9dc8e8;
@@ -27,8 +27,8 @@ Theme Designer Version: 2026.08.02.60280
   --dp-scheduler-event-bar-top: 0px;
   --dp-scheduler-event-bar-height: 4px;
   --dp-scheduler-event-bar-display: none;
-  --dp-scheduler-cell-bg-color: #524e4e;
-  --dp-scheduler-cell-business-bg-color: #655f5f;
+  --dp-scheduler-cell-bg-color: rgba(255, 255, 255, 0.208);
+  --dp-scheduler-cell-business-bg-color: rgba(255, 255, 255, 0.259);
   --dp-scheduler-event-vertical-align: center;
   --dp-scheduler-event-horizontal-align: ;
   --dp-scheduler-rowheader-padding: 7px;

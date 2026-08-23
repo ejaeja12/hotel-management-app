@@ -4,20 +4,20 @@ https://themes.daypilot.org/scheduler/theme/euz3t4
 Theme Designer Version: 2025.12.31.41986
 */
 .scheduler_green_main:not(.default) {
-  --dp-scheduler-border-color: #c0c0c0;
+  --dp-scheduler-border-color: rgba(119, 118, 118, 0.64);
   --dp-scheduler-border-inner-color: var(--dp-scheduler-border-color);
   --dp-scheduler-font-family:
     -apple-system, system-ui, BlinkMacSystemFont, "Segoe UI", Roboto,
     "Helvetica Neue", Arial, sans-serif;
   --dp-scheduler-font-size: 13px;
   --dp-scheduler-header-color: #ffffff;
-  --dp-scheduler-header-bg-color: #646464;
+  --dp-scheduler-header-bg-color: rgba(43, 44, 43, 0.846);
   --dp-scheduler-message-padding: 10px;
   --dp-scheduler-message-bg-color: #ffa216;
   --dp-scheduler-message-color: #ffffff;
   --dp-scheduler-grid-line-color: #eeeeee;
   --dp-scheduler-event-color: #ffffff;
-  --dp-scheduler-event-border-color: #6c8500;
+  --dp-scheduler-event-border-color: #fbfbfb;
   --dp-scheduler-event-border-radius: 14px;
   --dp-scheduler-event-padding: 10px;
   --dp-scheduler-event-bar-bg-color: #9dc8e8;

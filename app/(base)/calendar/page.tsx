@@ -1,4 +1,4 @@
-import CalendarReservation from "@/components/calendar-reservation"
+import CalendarReservation from "@/components/calendar_scheduler/calendar-reservation"
 
 export default function Calendar() {
   return (

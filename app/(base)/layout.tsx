@@ -9,10 +9,10 @@ export default function BaseLayout({
   return (
     <>
       <AppHeader></AppHeader>
-      <Separator
+      {/* <Separator
         orientation="horizontal"
         className={"border border-b-foreground"}
-      ></Separator>
+      ></Separator> */}
       <div className="mt-below-header w-full">{children}</div>
     </>
   )

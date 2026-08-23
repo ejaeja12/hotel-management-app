@@ -17,7 +17,9 @@ export default function OperationalLayout({
         }
       >
         <AppSidebar variant="inset" />
-        <SidebarInset>{children}</SidebarInset>
+        <SidebarInset className="px-4 py-4 md:py-6 lg:px-6">
+          {children}
+        </SidebarInset>
       </SidebarProvider>
     </>
   )
