@@ -8,6 +8,7 @@ type Room = {
 type RoomTypeWithRoom = {
   id: string
   name: string
+  color?: string
   room: Room[]
 }
 
@@ -27,21 +28,13 @@ type Reservation = {
   room: Room
 }
 
-// type eventData = {
-//   id: string
-//   text: string
-//   start: DayPilot.Date | Date
-//   end: DayPilot.Date | Date
-//   resource: string
-//   backColor: string
-// }
-
 const colorSchedule = {
   BLUE: "#2563EB",
-  GREEN: "#059669",
+  GREEN: "#46a142",
   PURPLE: "#7C3AED",
   RED: "#DC2626",
   ORANGE: "#EA580C",
+  YELLOW: "#ffd200",
 }
 
 enum reservationStatus {
@@ -49,20 +42,36 @@ enum reservationStatus {
   CANCEL = "cancel",
   CHECKIN = "checkin",
   CHECKOUT = "checkout",
+  INHOUSE = "inhouse",
+  ALREADY_CHECKOUT = "already_checkout",
 }
 
 function setColorSchedule(status: string): string {
   switch (status) {
     case reservationStatus.RESERVE:
-      return colorSchedule.BLUE
+      return colorSchedule.GREEN
     case reservationStatus.CANCEL:
       return colorSchedule.RED
     case reservationStatus.CHECKIN:
-      return colorSchedule.GREEN
+      return colorSchedule.BLUE
     case reservationStatus.CHECKOUT:
       return colorSchedule.ORANGE
+    case reservationStatus.ALREADY_CHECKOUT:
+      return colorSchedule.PURPLE
+    case reservationStatus.INHOUSE:
+      return colorSchedule.YELLOW
     default:
       return colorSchedule.BLUE
+  }
+}
+
+function setTextColor(status: string) {
+  switch (status) {
+    case reservationStatus.INHOUSE:
+      return "text-slate-700"
+
+    default:
+      return "text-white"
   }
 }
 
@@ -80,9 +89,9 @@ export function setResourceScheduler(
     const roomType = {
       name: item.name,
       id: item.id,
-      backColor: "#2563EB",
+      backColor: item.color,
       html: `<div class='font-bold text-lg  w-40   text-center'>
-                <span>${item.name}</span>
+                <span class=''>${item.name}</span>
             </div>`,
     }
 
@@ -91,7 +100,7 @@ export function setResourceScheduler(
         name: room.name !== undefined ? room.name : room.id,
         id: room.id,
         html: `<div class=' w-40   text-center'>
-                <span>${room.name}</span>
+                <span  >${room.name}</span>
             </div>`,
       }
     })
@@ -115,9 +124,10 @@ export function setEventData(
   arg.map((res) => {
     const temp = {
       id: res.id,
-      text: res.guest,
+      text: `${res.guest} - ${res.status}`,
       start: res.start,
       end: res.end,
+      html: `<div class=${setTextColor(res.status)}>${res.guest} - ${res.status}</div>`,
       resource: res.room.id,
       backColor: setColorSchedule(res.status),
     }
@@ -158,6 +168,7 @@ export const dataTipeKamar = [
   {
     id: dummyRoomType.DELUXE.id,
     name: dummyRoomType.DELUXE.name,
+    color: colorSchedule.RED,
     room: [
       {
         id: dummyRoom.DEL_01.id,
@@ -176,6 +187,7 @@ export const dataTipeKamar = [
   {
     id: dummyRoomType.SUPERDELUXE.id,
     name: dummyRoomType.SUPERDELUXE.name,
+    color: colorSchedule.GREEN,
     room: [
       {
         id: dummyRoom.SDL_01.id,
@@ -194,6 +206,7 @@ export const dataTipeKamar = [
   {
     id: dummyRoomType.DOUBLE.id,
     name: dummyRoomType.DOUBLE.name,
+    color: colorSchedule.PURPLE,
     room: [
       {
         id: dummyRoom.DBL_01.id,
@@ -212,6 +225,7 @@ export const dataTipeKamar = [
   {
     id: dummyRoomType.SUITE.id,
     name: dummyRoomType.SUITE.name,
+    color: colorSchedule.BLUE,
     room: [
       {
         id: dummyRoom.SUIT_01.id,
@@ -233,10 +247,10 @@ const sampleStart = DayPilot.Date.today()
 export const dataReservasi = [
   {
     id: "050231",
-    guest: "Udin",
-    start: sampleStart,
+    guest: "Mr. Udin",
     status: reservationStatus.CHECKIN,
-    end: sampleStart.addDays(1),
+    start: sampleStart,
+    end: sampleStart.addDays(3),
     room: {
       id: dummyRoom.DEL_01.id,
     },
@@ -244,8 +258,8 @@ export const dataReservasi = [
   {
     id: "050256",
     guest: "Ms. Jane Doe",
-    status: reservationStatus.RESERVE,
-    start: sampleStart.addDays(-3),
+    status: reservationStatus.INHOUSE,
+    start: sampleStart.addDays(-1),
     end: sampleStart.addDays(1),
     room: {
       id: dummyRoom.DEL_02.id,
@@ -255,8 +269,8 @@ export const dataReservasi = [
     id: "0501513",
     guest: "Ms. Anna Koe",
     status: reservationStatus.CHECKOUT,
-    start: sampleStart.addDays(-3),
-    end: sampleStart.addDays(1),
+    start: sampleStart.addDays(-4),
+    end: sampleStart.addHours(12),
     room: {
       id: dummyRoom.SDL_01.id,
     },
@@ -265,10 +279,40 @@ export const dataReservasi = [
     id: "0501511",
     guest: "Mr. Armin Artlert",
     status: reservationStatus.RESERVE,
-    start: sampleStart.addDays(1),
+    start: sampleStart.addDays(1).addHours(12),
     end: sampleStart.addDays(4),
     room: {
       id: dummyRoom.SDL_01.id,
+    },
+  },
+  {
+    id: "0584579",
+    guest: "Mr. Bark Barker",
+    status: reservationStatus.INHOUSE,
+    start: sampleStart.addDays(-3),
+    end: sampleStart.addDays(1),
+    room: {
+      id: dummyRoom.SDL_03.id,
+    },
+  },
+  {
+    id: "05865456",
+    guest: "Mr. Alan robertsoon",
+    status: reservationStatus.ALREADY_CHECKOUT,
+    start: sampleStart.addDays(-6),
+    end: sampleStart.addDays(-2),
+    room: {
+      id: dummyRoom.DBL_02.id,
+    },
+  },
+  {
+    id: "058616",
+    guest: "Mrs. Anne Nicole",
+    status: reservationStatus.CANCEL,
+    start: sampleStart.addDays(-8),
+    end: sampleStart.addDays(-4),
+    room: {
+      id: dummyRoom.DEL_03.id,
     },
   },
 ]
