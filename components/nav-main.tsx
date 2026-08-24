@@ -24,7 +24,7 @@ export function NavMain({
   const pathName = usePathname()
 
   return (
-    <SidebarGroup>
+    <SidebarGroup className="w-fit">
       <SidebarGroupContent className="flex flex-col gap-2">
         <SidebarMenu>
           <SidebarMenuItem className="flex items-center gap-2"></SidebarMenuItem>

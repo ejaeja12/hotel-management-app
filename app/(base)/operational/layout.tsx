@@ -11,7 +11,7 @@ export default function OperationalLayout({
       <SidebarProvider
         style={
           {
-            "--sidebar-width": "calc(var(--spacing) * 52)",
+            "--sidebar-width": "calc(var(--spacing) * 44)",
             "--header-height": "calc(var(--spacing) * 12)",
           } as React.CSSProperties
         }

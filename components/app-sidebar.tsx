@@ -153,20 +153,18 @@ const data = {
 export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
   return (
     <Sidebar
-      className="fixed top-below-header! w-fit"
+      className="fixed top-below-header! h-screen w-fit"
       collapsible="icon"
       {...props}
     >
       <SidebarHeader className="flex flex-row justify-end py-0">
         <SidebarTrigger></SidebarTrigger>
       </SidebarHeader>
-      <SidebarContent className="w-fit! p-0!">
+      <SidebarContent className="w-fit! px-0!">
         <NavMain items={data.navMain} />
         <NavSecondary items={data.navSecondary} className="mt-auto" />
       </SidebarContent>
-      <SidebarFooter className="w-fit">
-        <NavUser user={data.user} />
-      </SidebarFooter>
+      <SidebarFooter className="h-15 w-fit"></SidebarFooter>
     </Sidebar>
   )
 }

@@ -27,7 +27,7 @@ export default function AppHeader() {
   const pathname = usePathname()
 
   return (
-    <header className="fixed top-0 z-30 flex h-nav-header w-full bg-header">
+    <header className="fixed top-0 z-30 flex h-nav-header w-full border-b bg-header">
       {/* nav */}
       <div className="flex w-full justify-start bg-header text-text-header">
         {navUrl.map((item, index) => {
@@ -35,9 +35,9 @@ export default function AppHeader() {
           const isActive = pathname.startsWith(prefix)
 
           return (
-            <Link href={item.url} key={index}>
+            <Link href={item.url} key={index} className="py-1">
               <Button
-                className={`h-full! w-32 rounded-none bg-header text-text-header hover:bg-button-header/70 ${isActive && "bg-button-header/50"}`}
+                className={`h-full! w-32 rounded-4xl bg-header text-text-header hover:bg-button-header/70 ${isActive && "bg-button-header/50"}`}
               >
                 {item.label}
               </Button>
