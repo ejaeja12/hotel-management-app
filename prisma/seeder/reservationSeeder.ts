@@ -3,10 +3,11 @@ import { roomData } from "./roomSeeder"
 import { InvoiceStatus } from "@/generated/prisma/enums"
 import { InvoiceItemType } from "@/generated/prisma/enums"
 
-const id = ["AAA1", "BBB2", "CCC3"]
 const setId = (prefix: string, id: string) => {
   return `${prefix}-${id}`
 }
+
+const id = ["AAA1", "BBB2", "CCC3"]
 
 const dummyData = [
   {

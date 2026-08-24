@@ -1,11 +1,7 @@
 import "dotenv/config"
 import { Pool } from "pg"
 import { PrismaPg } from "@prisma/adapter-pg"
-import {
-  InvoiceItemType,
-  InvoiceStatus,
-  PrismaClient,
-} from "@/generated/prisma/client"
+import { PrismaClient } from "@/generated/prisma/client"
 import { extraChargeData } from "./seeder/extraChargeSeeder"
 import { bookingTypeData } from "./seeder/bookingTypeSeeder"
 import { roomTypeData, roomData } from "./seeder/roomSeeder"
