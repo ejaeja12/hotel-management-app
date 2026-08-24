@@ -1,9 +1,11 @@
 "use client"
 
-import { useState, useEffect } from "react"
+import { useState, useLayoutEffect, useEffect, useRef } from "react"
 import { DayPilot, DayPilotScheduler } from "@daypilot/daypilot-lite-react"
 import { useTheme } from "next-themes"
 import { setResourceScheduler, setEventData } from "./helper"
+import { useDrag } from "@/hooks/use-drag"
+import { useMounted } from "@/hooks/use-mounted"
 import "@/components/css/scheduler_dark.css"
 import "@/components/css/scheduler_green.css"
 
@@ -23,10 +25,28 @@ const colorSchedule = {
 export default function CalendarReservation() {
   const [scheduler, setScheduler] = useState<DayPilot.Scheduler>()
   const { resolvedTheme } = useTheme()
+  const [innerHeight, setInnerheight] = useState(0)
+  const boxRef = useRef<HTMLDivElement>(null)
 
-  //
+  const [xx, setXx] = useState(0)
+  const { delta, direction } = useDrag(boxRef)
 
-  console.log(setResourceScheduler(dataTipeKamar))
+  useLayoutEffect(() => {
+    const updateHeight = () => setInnerheight(window.innerHeight - 20)
+    // const updateHeight = () => setInnerheight(window.innerHeight - 117)
+    console.log(window.innerHeight)
+    updateHeight() // set nilai awal
+    window.addEventListener("resize", updateHeight)
+
+    return () => window.removeEventListener("resize", updateHeight)
+  }, [])
+
+  useEffect(() => {
+    if (!scheduler) {
+      return
+    }
+    scheduler.setScrollX(scheduler.getScrollX() - direction)
+  }, [delta])
 
   useEffect(() => {
     if (!scheduler) {
@@ -151,30 +171,39 @@ export default function CalendarReservation() {
   )
 
   return (
-    <DayPilotScheduler
-      cellWidth={100}
-      rowHeaderWidth={200}
-      eventHeight={60}
-      days={days}
-      theme={resolvedTheme === "dark" ? "scheduler_dark" : "scheduler_green"}
-      eventDeleteHandling={"Disabled"}
-      eventMoveHandling={"Disabled"}
-      eventClickHandling={"Enabled"}
-      eventResizeHandling={"Update"}
-      onEventClick={(e) => alert(e.e.text())}
-      onEventDeleted={onEventDeleted}
-      durationBarVisible={false}
-      height={1000}
-      onEventMoved={onEventMoved}
-      onEventResized={onEventResized}
-      onTimeRangeSelected={onTimeRangeSelected}
-      scale={"Day"}
-      startDate={startDate}
-      timeHeaders={timeHeaders}
-      timeRangeSelectedHandling={"Disabled"}
-      events={events}
-      resources={resources}
-      controlRef={setScheduler}
-    />
+    <div ref={boxRef} style={{ userSelect: "none" }}>
+      {/* <div className="flex flex-col">
+        <span>scroll x : {xx}</span>
+        <span>delta x : {delta}</span>
+        <span>direction x : {direction}</span>
+      </div> */}
+      <DayPilotScheduler
+        cellWidth={100}
+        rowHeaderWidth={200}
+        eventHeight={60}
+
+        days={days}
+        theme={resolvedTheme === "dark" ? "scheduler_dark" : "scheduler_green"}
+        eventDeleteHandling={"Disabled"}
+        eventMoveHandling={"Disabled"}
+        eventClickHandling={"Enabled"}
+        eventResizeHandling={"Update"}
+        onEventClick={(e) => alert(e.e.text())}
+        onEventDeleted={onEventDeleted}
+        durationBarVisible={false}
+        height={innerHeight - 100}
+        heightSpec="Max"
+        onEventMoved={onEventMoved}
+        onEventResized={onEventResized}
+        onTimeRangeSelected={onTimeRangeSelected}
+        scale={"Day"}
+        startDate={startDate}
+        timeHeaders={timeHeaders}
+        timeRangeSelectedHandling={"Disabled"}
+        events={events}
+        resources={resources}
+        controlRef={setScheduler}
+      />
+    </div>
   )
 }

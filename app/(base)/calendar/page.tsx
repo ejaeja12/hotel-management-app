@@ -2,7 +2,7 @@ import CalendarReservation from "@/components/calendar_scheduler/calendar-reserv
 
 export default function Calendar() {
   return (
-    <div className="min-h-screen">
+    <div className="max-h-[calc(100vh-var(--height-nav-header))] overflow-x-auto">
       <CalendarReservation></CalendarReservation>
     </div>
   )
