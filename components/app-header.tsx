@@ -37,7 +37,7 @@ export default function AppHeader() {
           return (
             <Link href={item.url} key={index} className="py-1">
               <Button
-                className={`h-full! w-32 rounded-4xl bg-header text-text-header hover:bg-button-header/70 ${isActive && "bg-button-header/50"}`}
+                className={`h-full! w-32 cursor-pointer rounded-4xl bg-header text-text-header hover:bg-button-header/70 ${isActive && "bg-button-header/50"}`}
               >
                 {item.label}
               </Button>

@@ -1,8 +1,13 @@
 import { IdentificationType, Prefix } from "@/generated/prisma/enums"
+import { generateId } from "@/lib/id-generator"
+
+function setId() {
+  return generateId("GST")
+}
 
 export const guestData = [
   {
-    id: "1DCscsC-SDC12s",
+    id: setId(),
     name: "Jhon Doe",
     prefix: Prefix.Mr,
     identificationType: IdentificationType.ktp,
@@ -10,7 +15,7 @@ export const guestData = [
     phone: "123456789",
   },
   {
-    id: "VSvsV23-sC123HT",
+    id: setId(),
     name: "Roxane doe",
     prefix: Prefix.Mrs,
     identificationType: IdentificationType.passport,
@@ -18,7 +23,7 @@ export const guestData = [
     phone: "123456789",
   },
   {
-    id: "CD123S1DS-CD1DCA",
+    id: setId(),
     name: "Jane Doe",
     prefix: Prefix.Ms,
     identificationType: IdentificationType.ktp,

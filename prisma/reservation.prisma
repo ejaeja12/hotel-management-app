@@ -3,70 +3,76 @@
 
 // // Get a free hosted Postgres database in seconds: `npx create-db`
 
-// model Reservation {
-//   id        String   @id
-//   guestId   String
-//   guest     Guest    @relation(fields: [guestId], references: [id])
-//   createdAt DateTime @default(now())
-//   updatedAt DateTime @updatedAt
+enum InvoiceStatus {
+  open
+  closed
+}
 
-//   // email         String
-//   // emailVerified Boolean   @default(false)
-//   // image         String?
-//   // createdAt     DateTime  @default(now())
-//   // updatedAt     DateTime  @updatedAt
-//   // sessions      Session[]
-//   // accounts      Account[]
-//   // @@unique([email])
-//   @@map("reservation")
-// }
+enum InvoiceItemType {
+  room
+  extracharge
+}
 
-// model Stay {
-//   id String @id
-//   reservationId String
-//   reservation Reservation @relation(fields : [reservationId], references:[id])
-//   // expiresAt DateTime
-//   // token     String
-//   // createdAt DateTime @default(now())
-//   // updatedAt DateTime @updatedAt
-//   // ipAddress String?
-//   // userAgent String?
-//   // userId    String
-//   // user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+model Reservation {
+  id        String   @id
+  guestId   String
+  guest     Guest    @relation(fields: [guestId], references: [id])
+  invoice   Invoice?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  stays     Stay[]
 
-//   // @@unique([token])
-//   // @@index([userId])
-//   // @@map("session")
-// }
+  @@map("reservation")
+}
 
-// model Invoice {
-//   id String @id
-//   // accountId             String
-//   // providerId            String
-//   // userId                String
-//   // user                  User      @relation(fields: [userId], references: [id], onDelete: Cascade)
-//   // accessToken           String?
-//   // refreshToken          String?
-//   // idToken               String?
-//   // accessTokenExpiresAt  DateTime?
-//   // refreshTokenExpiresAt DateTime?
-//   // scope                 String?
-//   // password              String?
-//   // createdAt             DateTime  @default(now())
-//   // updatedAt             DateTime  @updatedAt
+model Stay {
+  id            String        @id
+  reservationId String
+  reservation   Reservation   @relation(fields: [reservationId], references: [id])
+  roomId        String
+  room          Room          @relation(fields: [roomId], references: [id])
+  checkIn       DateTime
+  checkOut      DateTime
+  checkInAt     DateTime?
+  cehckOutAt    DateTime?
+  createdAt     DateTime      @default(now())
+  updatedAt     DateTime      @updatedAt
+  invoiceItems  InvoiceItem[]
 
-//   // @@index([userId])
-//   // @@map("account")
-// }
+  @@map("stay")
+}
 
-// model InvoiceItem {
-//   id String @id
-//   // identifier String
-//   // value      String
-//   // expiresAt  DateTime
-//   // createdAt  DateTime @default(now())
-//   // updatedAt  DateTime @updatedAt
+model Invoice {
+  id            String        @id
+  reservationId String        @unique
+  reservation   Reservation   @relation(fields: [reservationId], references: [id])
+  invoiceItem   InvoiceItem[]
+  status        InvoiceStatus
+  total         Int
+  createdAt     DateTime      @default(now())
+  updatedAt     DateTime      @updatedAt
 
-//   // @@index([identifier])
-//   // @@map("verification")
-// }
+  // @@index([userId])
+  @@map("invoice")
+}
+
+model InvoiceItem {
+  id            String          @id
+  type          InvoiceItemType
+  invoiceId     String
+  invoice       Invoice         @relation(fields: [invoiceId], references: [id])
+  itemCount     Int
+  price         Int
+  extraChargeId String?
+  extraCharge   ExtraCharge?    @relation(fields: [extraChargeId], references: [id])
+  stayId        String?
+  stay          Stay?           @relation(fields: [stayId], references: [id])
+  // identifier String
+  // value      String
+  // expiresAt  DateTime
+  createdAt     DateTime        @default(now())
+  updatedAt     DateTime        @updatedAt
+
+  // @@index([identifier])
+  @@map("invoiceItem")
+}

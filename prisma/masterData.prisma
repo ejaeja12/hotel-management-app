@@ -40,6 +40,7 @@ model Room {
   name      String
   typeId    String
   roomType  RoomType   @relation(fields: [typeId], references: [id], onDelete: Cascade)
+  stay      Stay[]
   price     Int
   status    RoomStatus @default(available)
   createdAt DateTime   @default(now())
@@ -55,6 +56,7 @@ model Guest {
   phone                String
   identificationNumber String
   identificationType   IdentificationType
+  reservation          Reservation[]
   createdAt            DateTime           @default(now())
   updatedAt            DateTime           @updatedAt
 
@@ -62,12 +64,13 @@ model Guest {
 }
 
 model ExtraCharge {
-  id        String           @id
-  name      String
-  price     Int
-  status    ActivationStatus @default(active)
-  createdAt DateTime         @default(now())
-  updatedAt DateTime         @updatedAt
+  id         String           @id
+  name       String
+  price      Int
+  status     ActivationStatus @default(active)
+  invoieItem InvoiceItem[]
+  createdAt  DateTime         @default(now())
+  updatedAt  DateTime         @updatedAt
 
   // @@index([userId])
   // @@map("account")

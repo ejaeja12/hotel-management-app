@@ -1,16 +1,22 @@
+import { generateId } from "@/lib/id-generator"
+
+function setId() {
+  return generateId("EXC")
+}
+
 export const extraChargeData = [
   {
-    id: "ExBe2535",
+    id: setId(),
     name: "Extra Bed",
     price: 200000,
   },
   {
-    id: "aiRop9930",
+    id: setId(),
     name: "Air Port",
     price: 150000,
   },
   {
-    id: "BrgDF004w2",
+    id: setId(),
     name: "Break Fast",
     price: 75000,
   },

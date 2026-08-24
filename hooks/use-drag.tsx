@@ -45,7 +45,7 @@ export function useDrag(elRef: RefObject<HTMLElement | null>) {
     const onMouseUp = () => {
       isDragging.current = false
       setDirection(0)
-      el.style.cursor = "grab"
+      el.style.cursor = "default"
       curr = 0
       // reset saat mouse dilepas
     }
@@ -53,13 +53,13 @@ export function useDrag(elRef: RefObject<HTMLElement | null>) {
     el.addEventListener("mousedown", onMouseDown)
     window.addEventListener("mousemove", onMouseMove)
     window.addEventListener("mouseup", onMouseUp)
-    el.addEventListener("mouseenter", onMouseEnter)
+    // el.addEventListener("mouseenter", onMouseEnter)
 
     return () => {
       el.removeEventListener("mousedown", onMouseDown)
       window.removeEventListener("mousemove", onMouseMove)
       window.removeEventListener("mouseup", onMouseUp)
-      el.removeEventListener("mouseenter", onMouseEnter)
+      // el.removeEventListener("mouseenter", onMouseEnter)
     }
   }, [elRef])
 

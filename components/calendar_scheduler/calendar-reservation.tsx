@@ -178,10 +178,9 @@ export default function CalendarReservation() {
         <span>direction x : {direction}</span>
       </div> */}
       <DayPilotScheduler
-        cellWidth={100}
+        cellWidth={105}
         rowHeaderWidth={200}
-        eventHeight={60}
-
+        eventHeight={45}
         days={days}
         theme={resolvedTheme === "dark" ? "scheduler_dark" : "scheduler_green"}
         eventDeleteHandling={"Disabled"}

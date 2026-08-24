@@ -1,5 +1,11 @@
+import { generateId } from "@/lib/id-generator"
+
+function setId() {
+  return generateId("BOK")
+}
+
 export const bookingTypeData = [
-  { id: "TR531865V", name: "Traveloka" },
-  { id: "AjgkGOmFA", name: "Agoda" },
-  { id: "BOK45346", name: "walk-in" },
+  { id: setId(), name: "Traveloka" },
+  { id: setId(), name: "Agoda" },
+  { id: setId(), name: "walk-in" },
 ]
