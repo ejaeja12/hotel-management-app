@@ -1,6 +1,6 @@
 import { AppSidebar } from "@/components/app-sidebar"
 import { SidebarInset, SidebarProvider } from "@/components/ui/sidebar"
-import { OperationalNav } from "@/components/navlink-sidebar/operational-nav"
+import { MasterNav } from "@/components/navlink-sidebar/master-nav"
 
 export default function OperationalLayout({
   children,
@@ -18,7 +18,7 @@ export default function OperationalLayout({
         }
       >
         <AppSidebar variant="inset">
-          <OperationalNav></OperationalNav>
+          <MasterNav></MasterNav>
         </AppSidebar>
         <SidebarInset className="px-4 py-4 md:py-6 lg:px-6">
           {children}

@@ -15,7 +15,7 @@ const navUrl = [
     label: "Operational",
   },
   {
-    url: "/#",
+    url: "/master/guest",
     label: "Master Data",
   },
   {

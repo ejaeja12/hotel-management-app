@@ -18,9 +18,9 @@ model Reservation {
   guestId   String
   guest     Guest    @relation(fields: [guestId], references: [id])
   invoice   Invoice?
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-  stays     Stay[]
+  createdAt DateTime @default(now()) @db.Timestamptz(3)
+  updatedAt DateTime @updatedAt @db.Timestamptz(3)
+  stay      Stay[]
 
   @@map("reservation")
 }
@@ -35,8 +35,8 @@ model Stay {
   checkOut      DateTime
   checkInAt     DateTime?
   cehckOutAt    DateTime?
-  createdAt     DateTime      @default(now())
-  updatedAt     DateTime      @updatedAt
+  createdAt     DateTime      @default(now()) @db.Timestamptz(3)
+  updatedAt     DateTime      @updatedAt @db.Timestamptz(3)
   invoiceItems  InvoiceItem[]
 
   @@map("stay")
@@ -49,8 +49,8 @@ model Invoice {
   invoiceItem   InvoiceItem[]
   status        InvoiceStatus
   total         Int
-  createdAt     DateTime      @default(now())
-  updatedAt     DateTime      @updatedAt
+  createdAt     DateTime      @default(now()) @db.Timestamptz(3)
+  updatedAt     DateTime      @updatedAt @db.Timestamptz(3)
 
   // @@index([userId])
   @@map("invoice")
@@ -70,8 +70,8 @@ model InvoiceItem {
   // identifier String
   // value      String
   // expiresAt  DateTime
-  createdAt     DateTime        @default(now())
-  updatedAt     DateTime        @updatedAt
+  createdAt     DateTime        @default(now()) @db.Timestamptz(3)
+  updatedAt     DateTime        @updatedAt @db.Timestamptz(3)
 
   // @@index([identifier])
   @@map("invoiceItem")

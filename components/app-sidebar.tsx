@@ -7,7 +7,7 @@ import { SidebarTrigger } from "@/components/ui/sidebar"
 import { NavMain } from "@/components/nav-main"
 import { NavSecondary } from "@/components/nav-secondary"
 import { NavUser } from "@/components/nav-user"
-
+import { getYesterdayDate, getTomorrowDate } from "@/lib/utils"
 import {
   Sidebar,
   SidebarContent,
@@ -48,7 +48,7 @@ const data = {
     },
     {
       title: "Reservation",
-      url: "/operational/reservation",
+      url: `/operational/reservation?checkin=${getYesterdayDate()}&checkout=${getTomorrowDate()}`,
       icon: <ListIcon />,
     },
     {
@@ -150,7 +150,16 @@ const data = {
     },
   ],
 }
-export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
+
+type Nav = {
+  title: string
+  url: string
+  icon: React.ReactNode
+}
+export function AppSidebar({
+  children,
+  ...props
+}: React.ComponentProps<typeof Sidebar> & { children: React.ReactNode }) {
   return (
     <Sidebar
       className="fixed top-below-header! h-screen w-fit"
@@ -161,7 +170,8 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
         <SidebarTrigger></SidebarTrigger>
       </SidebarHeader>
       <SidebarContent className="w-fit! px-0!">
-        <NavMain items={data.navMain} />
+        {/* <NavMain items={nav} /> */}
+        {children}
         <NavSecondary items={data.navSecondary} className="mt-auto" />
       </SidebarContent>
       <SidebarFooter className="h-15 w-fit"></SidebarFooter>
