@@ -2,13 +2,14 @@ import { guestData } from "./guestSeeder"
 import { roomData } from "./roomSeeder"
 import { InvoiceStatus } from "@/generated/prisma/enums"
 import { InvoiceItemType } from "@/generated/prisma/enums"
-import { getDate } from "@/lib/utils"
+import { getDate } from "@/lib/date-utils"
+import { generateId } from "@/lib/id-generator"
 
 const setId = (prefix: string, id: string) => {
   return `${prefix}-${id}`
 }
 
-const id = ["AAA1", "BBB2", "CCC3"]
+const id = [generateId(), generateId(), generateId()] // ["AAA1", "BBB2", "CCC3"]
 
 const dummyData = [
   {
@@ -52,20 +53,20 @@ const dummyData = [
     },
   },
   {
-    reservation: { id: setId("RSV", id[3]), guestId: guestData[0].id },
+    reservation: { id: setId("RSV", id[2]), guestId: guestData[0].id },
     stay: {
-      id: setId("STY", id[3]),
-      roomId: roomData[3].id,
+      id: setId("STY", id[2]),
+      roomId: roomData[2].id,
       checkIn: getDate(-2),
       checkOut: getDate(0),
     },
     invoice: {
-      id: setId("INV", id[3]),
+      id: setId("INV", id[2]),
       status: InvoiceStatus.open,
       total: 0,
     },
     invoiceItem: {
-      id: setId("INVIT", id[3]),
+      id: setId("INVIT", id[2]),
       type: InvoiceItemType.room,
       price: roomData[3].price,
       itemCount: 1,

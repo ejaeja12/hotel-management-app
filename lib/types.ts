@@ -18,12 +18,13 @@ export type ReservationType = {
 
 export type GuestType = {
   id: string
-  prefix: PrefixEnum
+  prefix: PrefixEnum | string
   name: string
   phone: string
-  identficationType: EnumIdentificationType
-  createdAt?: string
-  updatedAt?: string
+  identificationNumber: string
+  identificationType: EnumIdentificationType | string
+  createdAt?: string | Date
+  updatedAt?: string | Date
 }
 
 export type StayType = {
@@ -31,7 +32,7 @@ export type StayType = {
   reservationId?: string
   room: TypeRoom
   checkIn: string | Date
-  cehckOut?: string | Date
+  checkOut: string | Date
   createdAt?: string
   updatedAt?: string
 }
@@ -43,6 +44,7 @@ export type TypeRoomType = {
 }
 export type TypeRoom = {
   id: string
+  name: string
   createdAt?: string
   updatedAt?: string
 }
@@ -51,4 +53,14 @@ export type ExtraChargeType = {
   id: string
   createdAt?: string
   updatedAt?: string
+}
+
+export type PaginationType = {
+  currentPage: number
+  totalPages: number
+  totalCount: number
+  hasNextPage: boolean
+  hasPrevPage: boolean
+  nextPage: number | null
+  prevPage: number | null
 }

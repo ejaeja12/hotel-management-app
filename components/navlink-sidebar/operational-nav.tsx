@@ -11,7 +11,7 @@ import {
   SidebarMenuItem,
 } from "@/components/ui/sidebar"
 import { LayoutDashboardIcon, ListIcon } from "lucide-react"
-import { getYesterdayDate, getTomorrowDate } from "@/lib/utils"
+import { getYesterdayDate, getTomorrowDate } from "@/lib/date-utils"
 
 const data = [
   {

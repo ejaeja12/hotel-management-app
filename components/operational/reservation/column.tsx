@@ -21,7 +21,7 @@ import {
 import type { TableFeaturesType } from "@/components/operational/reservation/reservation-data-table"
 import { EllipsisVerticalIcon } from "lucide-react"
 
-type GuestTableType = Pick<GuestType, "name">
+type GuestTableType = Pick<GuestType, "name" | "prefix">
 
 // type ReservationColumnType = {
 //   id: string
@@ -42,27 +42,59 @@ const columnHelper = createColumnHelper<
 >()
 
 export const columns = columnHelper.columns([
+  columnHelper.display({
+    id: "spacer",
+  }),
   {
     accessorKey: "id",
-    header: "id",
-    accessorFn: (row) => row.id,
+    header: "Reservation Id",
     cell: ({ row }) => (
-      <div className="flex w-sm">
-        <span className="">{row.original.id}</span>
+      <div className="h-fit max-w-36 truncate">
+        <span className="text-left break-all">{row.original.id}</span>
       </div>
     ),
   },
   {
     accessorKey: "guest.name",
     accessorFn: (row) => (row.date ? null : row.guest?.name),
-    header: "Guest",
+    header: "Guest Name",
+    cell: ({ row }) => (
+      <div className="w-full">
+        <span className="text-left">{`${row.original.guest?.prefix}. ${row.original.guest?.name}`}</span>
+      </div>
+    ),
   },
   {
     accessorKey: "stay.0.room.name",
-    header: "Room",
+    header: "Room Number",
     cell: ({ row }) => (
-      <div className="w-sm">
-        <span className="">{row.original.id}</span>
+      <div className="">
+        <span className="">{row.original.stay?.[0]?.room?.name}</span>
+      </div>
+    ),
+  },
+
+  {
+    accessorKey: "stay.0.checkIn",
+    header: "Check in",
+    cell: ({ row }) => (
+      <div className="">
+        <span className="">
+          {row.original.stay &&
+            new Date(row.original.stay[0]?.checkIn).toDateString()}
+        </span>
+      </div>
+    ),
+  },
+  {
+    accessorKey: "stay.0.checkOut",
+    header: "Check Out",
+    cell: ({ row }) => (
+      <div className="">
+        <span className="">
+          {row.original.stay &&
+            new Date(row.original.stay[0]?.checkOut).toDateString()}
+        </span>
       </div>
     ),
   },

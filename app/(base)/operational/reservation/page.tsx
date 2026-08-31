@@ -1,10 +1,16 @@
-import { getReservation } from "@/actions/operational/reservation/reservation"
+import { getReservation } from "@/actions/operational/reservation-action"
 import { GroupedDataTable } from "@/components/operational/reservation/reservation-data-table"
 import { columns } from "@/components/operational/reservation/column"
 import type { ReservationColumnType } from "@/components/operational/reservation/column"
+import { Card } from "@/components/ui/card"
 
-export default async function Reservation() {
-  const reservationData = await getReservation()
+export default async function Reservation({
+  searchParams,
+}: {
+  searchParams: Promise<{ checkin: string; checkout: string }>
+}) {
+  const { checkin, checkout } = await searchParams
+  const reservationData = await getReservation(checkin, checkout)
   // console.log("data reservation :", reservationData)
   // console.log("get date time : ", getDate(-2))
 
@@ -32,12 +38,12 @@ export default async function Reservation() {
   // console.log(ss())
   return (
     <>
-      <div className="flex flex-col">
+      <Card className="flex flex-col p-3">
         <GroupedDataTable
           data={flatenReservationData()}
           columns={columns}
         ></GroupedDataTable>
-      </div>
+      </Card>
     </>
   )
 }

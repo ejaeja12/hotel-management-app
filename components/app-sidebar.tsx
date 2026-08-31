@@ -7,7 +7,7 @@ import { SidebarTrigger } from "@/components/ui/sidebar"
 import { NavMain } from "@/components/nav-main"
 import { NavSecondary } from "@/components/nav-secondary"
 import { NavUser } from "@/components/nav-user"
-import { getYesterdayDate, getTomorrowDate } from "@/lib/utils"
+import { getYesterdayDate, getTomorrowDate } from "@/lib/date-utils"
 import {
   Sidebar,
   SidebarContent,

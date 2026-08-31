@@ -10,11 +10,13 @@ export async function getReservationByDate(startDate: string, endDate: string) {
         {
           checkIn: {
             gte: startDate,
+            lte: endDate,
           },
         },
         {
           checkOut: {
             lte: endDate,
+            gte: startDate,
           },
         },
       ],
@@ -56,6 +58,7 @@ export async function getReservationByDate(startDate: string, endDate: string) {
       guest: {
         select: {
           name: true,
+          prefix: true,
         },
       },
     },
