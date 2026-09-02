@@ -102,7 +102,7 @@ function InputField({ id = "", onStateChange }: { id?: string; onStateChange: ()
     return { changedValue, isDiff }
   }
 
-  // Ini pun supaya di dialog confirm guest key nya rapih, enak dibaca
+  // Ini supaya di dialog confirm guest key nya rapi
   function makeGuestKeyReadable(par: string) {
     switch (par) {
       case "identificationNumber":
@@ -246,7 +246,7 @@ function InputField({ id = "", onStateChange }: { id?: string; onStateChange: ()
           {initialGuest &&
             Object.keys(getDiff().changedValue).map((k, i) => (
               <div key={i} className="grid w-full grid-cols-12 border-b pb-2">
-                <span className="col-span-3 text-center font-bold">{makeGuestKeyReadable(k)} : </span>
+                <span className="col-span-3 text-center font-bold">{makeGuestKeyReadable(k)}</span>
                 <span className="col-span-3 text-center">{initialGuest[k as keyof GuestFormType]}</span>
                 <span className="col-span-3 flex justify-center text-center">
                   <MoveRightIcon />
@@ -295,8 +295,8 @@ function DialogConfirm({
       ></DialogTrigger> */}
       <DialogOverlay forceRender></DialogOverlay>
       <DialogContent className="min-w-1/3">
-        <DialogHeader className="text-xl">{title}</DialogHeader>
-        <div className="flex min-h-96 justify-center pt-10">{children}</div>
+        <DialogHeader className="text-xl font-bold">{title}</DialogHeader>
+        <div className="flex min-h-48 justify-center pt-5">{children}</div>
 
         <DialogFooter>
           <DialogClose render={<Button>Cancel</Button>} />
