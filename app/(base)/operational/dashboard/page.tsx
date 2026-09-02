@@ -1,6 +1,7 @@
 import { ChartAreaInteractive } from "@/components/chart-area-interactive"
 import { DataTable } from "@/components/data-table"
 import { SectionCards } from "@/components/section-cards"
+import { Suspense } from "react"
 import data from "./data.json"
 import { columns } from "@/components/operational/dashboard/column"
 export default function Dashboard() {
@@ -13,7 +14,9 @@ export default function Dashboard() {
             <div className="px-4 lg:px-6">
               <ChartAreaInteractive />
             </div>
-            <DataTable columns={columns} data={data} />
+            <Suspense fallback={<div>Loading...</div>}>
+              <DataTable columns={columns} data={data} />
+            </Suspense>
           </div>
         </div>
       </div>
