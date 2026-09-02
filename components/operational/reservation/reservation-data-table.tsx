@@ -97,8 +97,6 @@ export function GroupedDataTable<TData extends RowData>({
     onPaginationChange: setPagination,
   })
 
-  console.log("tes table", table.getRowModel().rows)
-
   return (
     <div className="">
       <section className="flex w-full items-center justify-end gap-2 py-5">

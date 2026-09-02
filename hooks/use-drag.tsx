@@ -31,14 +31,7 @@ export function useDrag(elRef: RefObject<HTMLElement | null>) {
       const currentX = e.pageX
 
       setDirection(curr == 0 ? 0 : (currentX - curr) * 1.5)
-      // console.log(
-      //   "current x : ",
-      //   currentX,
-      //   "curr : ",
-      //   curr,
-      //   "direction : ",
-      //   curr == 0 ? 0 : currentX - curr
-      // )
+
       curr = currentX
     }
 

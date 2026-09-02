@@ -76,6 +76,6 @@ export async function getReservationByDate(startDate: string, endDate: string) {
       )
     ),
   }))
-  console.log(result)
+
   return result
 }

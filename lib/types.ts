@@ -1,13 +1,4 @@
-enum PrefixEnum {
-  Mr,
-  Ms,
-  Mrs,
-}
-
-enum EnumIdentificationType {
-  passport,
-  ktp,
-}
+import { IdentificationType, Prefix } from "@/generated/prisma/enums"
 
 export type ReservationType = {
   id: string
@@ -18,11 +9,11 @@ export type ReservationType = {
 
 export type GuestType = {
   id: string
-  prefix: PrefixEnum | string
+  prefix: string | Prefix
   name: string
   phone: string
   identificationNumber: string
-  identificationType: EnumIdentificationType | string
+  identificationType: IdentificationType | string
   createdAt?: string | Date
   updatedAt?: string | Date
 }

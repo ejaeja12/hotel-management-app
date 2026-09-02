@@ -13,13 +13,7 @@ import type { GuestType } from "@/lib/types"
 
 import { TableFeaturesType } from "@/components/data-table"
 
-export type GuestColumnType = Omit<
-  GuestType,
-  "prefix" | "identificationType"
-> & {
-  identificationType: string
-  prefix: string
-}
+export type GuestColumnType = GuestType
 
 const columnHelper = createColumnHelper<TableFeaturesType, GuestColumnType>()
 

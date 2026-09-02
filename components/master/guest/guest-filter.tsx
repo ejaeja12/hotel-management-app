@@ -1,15 +1,8 @@
 "use client"
 import { useState, useEffect } from "react"
-import { getGuestByName } from "@/actions/master/guest-action"
+import { searchGuestByName } from "@/app/(base)/master/guest/action"
 import { useFilterParam } from "@/hooks/use-filterParam"
-import {
-  Select,
-  SelectContent,
-  SelectGroup,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select"
+import { Select, SelectContent, SelectGroup, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 
 import {
   Combobox,
@@ -43,7 +36,7 @@ export default function GuestFilter() {
   useEffect(() => {
     const timer = setTimeout(async () => {
       try {
-        const x = guestSearch === "" ? [] : await getGuestByName(guestSearch)
+        const x = guestSearch === "" ? [] : await searchGuestByName(guestSearch)
         if (x !== undefined) setData(x)
       } catch (error) {
         console.log("error : ", error)
@@ -79,25 +72,19 @@ export default function GuestFilter() {
           defaultValue={""}
           autoHighlight
         >
-          <ComboboxInput
-            className="flex justify-start!"
-            showTrigger={false}
-            placeholder="Search guest..."
-          >
+          <ComboboxInput className="flex justify-start!" showTrigger={false} placeholder="Search guest...">
             <SearchIcon size={15}></SearchIcon>
           </ComboboxInput>
           <ComboboxContent>
             {isLoading ? (
               <ComboboxEmpty>Searching...</ComboboxEmpty>
             ) : (
-              data?.length === 0 && (
-                <ComboboxEmpty>No guest found</ComboboxEmpty>
-              )
+              data?.length === 0 && <ComboboxEmpty>No guest found</ComboboxEmpty>
             )}
 
             <ComboboxList>
-              {(item) => (
-                <ComboboxItem key={item.name} value={item.name}>
+              {(item, i) => (
+                <ComboboxItem key={i} value={item.name}>
                   {item.name}
                 </ComboboxItem>
               )}
@@ -108,10 +95,7 @@ export default function GuestFilter() {
 
       {/* Filter Identification Type */}
       <Field className="w-36">
-        <FieldLabel
-          htmlFor="align-item"
-          className="text-[.8rem] whitespace-nowrap"
-        >
+        <FieldLabel htmlFor="align-item" className="text-[.8rem] whitespace-nowrap">
           Identification Type
         </FieldLabel>
         <Select
@@ -119,8 +103,7 @@ export default function GuestFilter() {
           onValueChange={(item) => filterParam.set("idType", item)}
           value={
             // cek apakah value dari param idType, ada dalam itemIdType, klo gak ada return null
-            itemIdType.find((item) => item.value === filterParam.get("idType"))
-              ?.value
+            itemIdType.find((item) => item.value === filterParam.get("idType"))?.value
           }
         >
           <SelectTrigger className="w-fit">
@@ -148,22 +131,12 @@ export default function GuestFilter() {
         <Combobox
           items={countryList}
           onValueChange={(item) => handleCountryFilterValueChange(item)}
-          value={
-            countryList.find(
-              (item) => item.code === filterParam.get("country")
-            ) ?? null
-          }
-          itemToStringLabel={(country: (typeof countryList)[number]) =>
-            country.name
-          }
+          value={countryList.find((item) => item.code === filterParam.get("country")) ?? null}
+          itemToStringLabel={(country: (typeof countryList)[number]) => country.name}
 
           autoHighlight
         >
-          <ComboboxInput
-            placeholder="Select Country"
-            showTrigger={false}
-            showClear
-          ></ComboboxInput>
+          <ComboboxInput placeholder="Select Country" showTrigger={false} showClear></ComboboxInput>
           <ComboboxContent>
             <ComboboxEmpty>No items found.</ComboboxEmpty>
             <ComboboxList>

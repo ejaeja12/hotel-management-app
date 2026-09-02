@@ -1,4 +1,4 @@
-import { getReservation } from "@/actions/operational/reservation-action"
+import { getReservation } from "./action"
 import { GroupedDataTable } from "@/components/operational/reservation/reservation-data-table"
 import { columns } from "@/components/operational/reservation/column"
 import type { ReservationColumnType } from "@/components/operational/reservation/column"
@@ -11,8 +11,6 @@ export default async function Reservation({
 }) {
   const { checkin, checkout } = await searchParams
   const reservationData = await getReservation(checkin, checkout)
-  // console.log("data reservation :", reservationData)
-  // console.log("get date time : ", getDate(-2))
 
   /**
    * date atau label group per-tanggal dibuat jadi objek yang selevel dengan data reservasinya, jadi satu array
@@ -35,7 +33,7 @@ export default async function Reservation({
     })
     return result
   }
-  // console.log(ss())
+
   return (
     <>
       <Card className="flex flex-col p-3">

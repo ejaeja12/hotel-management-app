@@ -1,4 +1,4 @@
-import { getGuest } from "@/actions/master/guest-action"
+import { getGuest } from "./action"
 import GuestContainer from "@/components/master/guest/guest-container"
 
 export default async function GuestPage({
@@ -8,7 +8,6 @@ export default async function GuestPage({
 }) {
   const { idType, page } = await searchParams
   const result = await getGuest(idType, page)
-  console.log("Guests meta: ", result.meta)
 
   return (
     <div className="flex w-full justify-center">

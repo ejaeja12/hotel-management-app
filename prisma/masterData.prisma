@@ -54,7 +54,7 @@ model Guest {
   prefix               Prefix
   name                 String
   phone                String
-  identificationNumber String
+  identificationNumber String             @unique
   identificationType   IdentificationType
   reservation          Reservation[]
   createdAt            DateTime           @default(now()) @db.Timestamptz(3)

@@ -52,7 +52,6 @@ const features = tableFeatures({
 })
 
 interface DataTableProps<TData extends RowData> {
-  buttonAction?: React.ReactNode
   columns: ColumnDef<typeof features, TData>[]
   showTableHead?: boolean
   data: TData[]
