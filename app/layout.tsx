@@ -37,13 +37,13 @@ export default function RootLayout({
           <Toaster />
           <TooltipProvider>
             <NextTopLoader
-              crawlSpeed={200}
+              crawlSpeed={50}
               crawl={false}
               initialPosition={0.99}
-              easing="ease"
+              easing="ease-in"
               height={2.3}
               color="#990000"
-              speed={200}
+              speed={50}
             />
             {children}
           </TooltipProvider>
