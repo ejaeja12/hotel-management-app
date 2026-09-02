@@ -235,8 +235,8 @@ function InputField({ id = "", onStateChange }: { id?: string; onStateChange: ()
           </Button>
         }
       >
-        <div className="flex w-full flex-col gap-3">
-          <div className="grid w-full grid-cols-12">
+        <div className="flex w-full flex-col gap-3 rounded-t-xl border">
+          <div className="grid w-full grid-cols-12 rounded-t-xl bg-muted/90 py-2 text-foreground">
             <span className="col-span-3 text-center font-bold">Field</span>
             <span className="col-span-3 text-center font-bold">Before</span>
             <span className="col-span-3"></span>

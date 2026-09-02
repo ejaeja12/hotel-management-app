@@ -3,6 +3,7 @@ import AppHeader from "@/components/app-header"
 import "@/components/css/globals.css"
 import { ThemeProvider } from "@/components/theme-provider"
 import { TooltipProvider } from "@/components/ui/tooltip"
+import NextTopLoader from "nextjs-toploader"
 import { Separator } from "@/components/ui/separator"
 import { Toaster } from "@/components/ui/toast"
 import { cn } from "@/lib/utils"
@@ -29,17 +30,23 @@ export default function RootLayout({
     <html
       lang="en"
       suppressHydrationWarning
-      className={cn(
-        "antialiased",
-        fontMono.variable,
-        "font-sans",
-        geist.variable
-      )}
+      className={cn("antialiased", fontMono.variable, "font-sans", geist.variable)}
     >
       <body>
         <ThemeProvider>
           <Toaster />
-          <TooltipProvider>{children}</TooltipProvider>
+          <TooltipProvider>
+            <NextTopLoader
+              crawlSpeed={200}
+              crawl={false}
+              initialPosition={0.99}
+              easing="ease"
+              height={2.3}
+              color="#990000"
+              speed={200}
+            />
+            {children}
+          </TooltipProvider>
         </ThemeProvider>
       </body>
     </html>
