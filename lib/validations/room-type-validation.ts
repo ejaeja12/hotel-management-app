@@ -1,7 +1,7 @@
 import z from "zod"
 import { Prefix, IdentificationType } from "@/generated/prisma/enums"
 
-export const guestValidation = z.object({
+export const roomTypeValidation = z.object({
   name: z.string().min(2, { message: "Name must be at least 2 characters" }),
   prefix: z.enum(Prefix, { error: "Chose prefix" }),
   phone: z
@@ -15,9 +15,9 @@ export const guestValidation = z.object({
     .transform((t) => t.replace(/\s/g, "")),
 })
 
-export type GuestValidationType = z.infer<typeof guestValidation>
+export type RoomTypeValidationType = z.infer<typeof roomTypeValidation>
 
-export type GuestFormType = Omit<GuestValidationType, "prefix" | "identificationType"> & {
+export type TypeOfRoomType = Omit<RoomTypeValidationType, "prefix" | "identificationType"> & {
   id: string
   prefix: string | Prefix
   identificationType: string | IdentificationType

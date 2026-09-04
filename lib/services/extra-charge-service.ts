@@ -1,9 +1,11 @@
 import { IdentificationType, Prefix, Prisma } from "@/generated/prisma/client"
+import { ActivationStatus } from "@/generated/prisma/enums"
 import { formatPageNumber, buildPaginationMeta } from "../utils"
 import { GuestValidationType } from "../validations/guest-validation"
 import { db } from "@/lib/db"
 import { revalidatePath } from "next/cache"
 import { generateId } from "../id-generator"
+import { ExtraChargeValidationType } from "../validations/extra-charge-validation"
 
 // const buat pagination
 
@@ -18,24 +20,24 @@ const checkIdType = (idType: string) => {
   }
 }
 
-export async function getGuestService(idType: string = "", page = "") {
+export async function getExtraChargeService(page = "") {
   const limit = 10
 
   const { skippedRow, pageNumber } = formatPageNumber(page, limit)
 
-  const filter: Prisma.GuestWhereInput = {
-    ...(checkIdType(idType) !== undefined && {
-      identificationType: checkIdType(idType),
-    }),
-  }
+  // const filter: Prisma.GuestWhereInput = {
+  //   ...(checkIdType(idType) !== undefined && {
+  //     identificationType: checkIdType(idType),
+  //   }),
+  // }
   const [data, totalPage] = await Promise.all([
-    db.guest.findMany({
-      where: filter,
+    db.extraCharge.findMany({
+      // where: filter,
       skip: skippedRow,
       take: limit,
       orderBy: { createdAt: "desc" },
     }),
-    db.guest.count({ where: filter }),
+    db.extraCharge.count(),
   ])
 
   return {
@@ -44,19 +46,17 @@ export async function getGuestService(idType: string = "", page = "") {
   }
 }
 
-export async function createGuestService(data: GuestValidationType) {
+export async function createExtraChargeService(data: ExtraChargeValidationType) {
   try {
-    await db.guest.create({
+    await db.extraCharge.create({
       data: {
         id: generateId("GUEST"),
-        prefix: data.prefix as Prefix,
         name: data.name,
-        phone: data.phone,
-        identificationNumber: data.identificationNumber,
-        identificationType: data.identificationType as IdentificationType,
+        status: data.status,
+        price: data.price,
       },
     })
-    revalidatePath("/master/guest")
+    revalidatePath("/master/extracharge")
     return {
       success: true,
       action: "create",
@@ -70,18 +70,16 @@ export async function createGuestService(data: GuestValidationType) {
   }
 }
 
-export async function editGuestService(id: string, data: GuestValidationType) {
+export async function editExtraChargeService(id: string, data: ExtraChargeValidationType) {
   try {
-    await db.guest.update({
+    await db.extraCharge.update({
       where: {
         id: id,
       },
       data: {
-        prefix: data.prefix as Prefix,
+        status: ActivationStatus.active,
         name: data.name,
-        phone: data.phone.trim(),
-        identificationNumber: data.identificationNumber.trim(),
-        identificationType: data.identificationType as IdentificationType,
+        price: data.price,
       },
     })
     revalidatePath("/master/guest")

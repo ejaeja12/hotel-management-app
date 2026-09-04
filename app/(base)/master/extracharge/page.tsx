@@ -1,3 +1,13 @@
-export default function ExtrachargePage() {
-  return <div className="max-h-[calc(100vh-var(--height-nav-header))] overflow-x-auto">THis is Extra charge page</div>
+import { getExtraCharge } from "./action"
+import ExtraChargeContainer from "@/components/master/extracharge/extra-charge-container"
+
+export default async function ExtraChargePage({ searchParams }: { searchParams: Promise<{ page: string }> }) {
+  const { page } = await searchParams
+  const result = await getExtraCharge(page)
+
+  return (
+    <div className="flex w-full justify-center">
+      <ExtraChargeContainer className="w-full" data={result}></ExtraChargeContainer>
+    </div>
+  )
 }
