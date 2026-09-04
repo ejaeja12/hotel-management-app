@@ -3,7 +3,7 @@
 import { getGuestService, createGuestService, editGuestService } from "@/lib/services/guest-service"
 import { guestValidation } from "@/lib/validations/guest-validation"
 import { db } from "@/lib/db"
-import { type GuestFormType } from "@/lib/validations/guest-validation"
+import { type GuestType } from "@/lib/validations/guest-validation"
 
 export type PrevState = {
   success: boolean
@@ -38,7 +38,7 @@ export async function showGuest(id: string) {
   return data
 }
 
-export async function createGuest(prev: PrevState, form: GuestFormType): Promise<PrevState> {
+export async function createGuest(prev: PrevState, form: GuestType): Promise<PrevState> {
   const validated = guestValidation.safeParse(form)
 
   if (!validated.success) {
@@ -48,7 +48,7 @@ export async function createGuest(prev: PrevState, form: GuestFormType): Promise
   return await createGuestService(validated.data)
 }
 
-export async function editGuest(prev: PrevState, form: GuestFormType): Promise<PrevState> {
+export async function editGuest(prev: PrevState, form: GuestType): Promise<PrevState> {
   const validated = guestValidation.safeParse(form)
 
   if (!validated.success) {

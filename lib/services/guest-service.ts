@@ -1,4 +1,7 @@
-import { IdentificationType, Prefix, Prisma } from "@/generated/prisma/client"
+"use server"
+
+import { Prisma } from "@/generated/prisma/client"
+import { IdentificationType, Prefix } from "@/generated/prisma/enums"
 import { formatPageNumber, buildPaginationMeta } from "../utils"
 import { GuestValidationType } from "../validations/guest-validation"
 import { db } from "@/lib/db"

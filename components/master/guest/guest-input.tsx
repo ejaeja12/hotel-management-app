@@ -4,8 +4,10 @@ import React, { useState, useEffect, useActionState } from "react"
 import { Dialog, DialogContent, DialogFooter, DialogHeader, DialogClose, DialogOverlay } from "@/components/ui/dialog"
 import { Button } from "@/components/ui/button"
 import { showGuest, createGuest, editGuest } from "@/app/(base)/master/guest/action"
-import { guestValidation, GuestFormType } from "@/lib/validations/guest-validation"
-import { IdentificationType, Prefix } from "@/generated/prisma/enums"
+import { guestValidation } from "@/lib/validations/guest-validation"
+import { Prefix, IdentificationType } from "@/generated/prisma/enums"
+
+import { GuestType } from "@/lib/validations/guest-validation"
 import { useUpdateDifferences } from "@/hooks/use-update-differences"
 import { toastSuccess, toastError } from "@/components/toast-status"
 import { Spinner } from "@/components/ui/spinner"
@@ -42,8 +44,8 @@ export default function GuestInput({ dialogState, onStateChange = () => {} }: Pr
 
 type FieldFormProps = {
   actionSubmit?: () => void
-  data: GuestFormType
-  onChangeData: (e: GuestFormType) => void
+  data: GuestType
+  onChangeData: (e: GuestType) => void
 }
 
 function FieldForm({ data, onChangeData }: FieldFormProps) {
@@ -122,7 +124,7 @@ function CreateField({ onStateChange }: { onStateChange: () => void }) {
     error: "",
   })
 
-  const [formValues, setformValues] = useState<GuestFormType>({
+  const [formValues, setformValues] = useState<GuestType>({
     id: "", // di action create sebenarnya ga pake id. ini di inisiasi buat nyenengin type safety aj
     prefix: "",
     name: "",
@@ -174,9 +176,9 @@ function EditField({ id, onStateChange }: { id: string; onStateChange: () => voi
     error: "",
   })
 
-  const [initialFormValues, setInitialFormValues] = useState<GuestFormType | null>(null)
+  const [initialFormValues, setInitialFormValues] = useState<GuestType | null>(null)
 
-  const [formValues, setFormValues] = useState<GuestFormType>({
+  const [formValues, setFormValues] = useState<GuestType>({
     id: "",
     prefix: "",
     name: "",
@@ -267,11 +269,11 @@ function EditField({ id, onStateChange }: { id: string; onStateChange: () => voi
             Object.keys(updateDiff.changedValue).map((k, i) => (
               <div key={i} className="grid w-full grid-cols-12 border-b pb-2">
                 <span className="col-span-3 text-center font-bold">{makeGuestKeyReadable(k)}</span>
-                <span className="col-span-3 text-center">{initialFormValues[k as keyof GuestFormType]}</span>
+                <span className="col-span-3 text-center">{initialFormValues[k as keyof GuestType]}</span>
                 <span className="col-span-3 flex justify-center text-center">
                   <MoveRightIcon />
                 </span>
-                <span className="col-span-3 text-center">{formValues[k as keyof GuestFormType]}</span>
+                <span className="col-span-3 text-center">{formValues[k as keyof GuestType]}</span>
               </div>
             ))}
         </div>

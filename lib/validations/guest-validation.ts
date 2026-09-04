@@ -17,7 +17,7 @@ export const guestValidation = z.object({
 
 export type GuestValidationType = z.infer<typeof guestValidation>
 
-export type GuestFormType = Omit<GuestValidationType, "prefix" | "identificationType"> & {
+export type GuestType = Omit<GuestValidationType, "prefix" | "identificationType"> & {
   id: string
   prefix: string | Prefix
   identificationType: string | IdentificationType
