@@ -9,6 +9,7 @@ import { ReservationType, StayType, GuestType } from "@/lib/types"
 import { Checkbox } from "@/components/ui/checkbox"
 
 import { TableCell, TableRow } from "@/components/ui/table"
+import { Badge } from "@/components/ui/badge"
 
 import {
   DropdownMenu,
@@ -28,6 +29,26 @@ type GuestTableType = Pick<GuestType, "name" | "prefix">
 //   stay: StayType[]
 //   guest: GuestTableType
 // }
+
+function badgeOccupancyStatus(par: string | undefined) {
+  switch (par) {
+    case "checkin":
+      return " bg-blue-600 text-white"
+    case "checkout":
+      return "bg-slate-600 text-white"
+    case "inhouse":
+      return "bg-green-600 text-white"
+    case "checkout":
+      return "bg-purple-600 text-white"
+    case "already_checkout":
+      return "bg-slate-600 text-white"
+    case "available":
+      return "bg-slate-100 text-black"
+
+    default:
+      return par
+  }
+}
 
 export type ReservationColumnType = {
   date?: string
@@ -78,7 +99,7 @@ export const columns = columnHelper.columns([
     header: "Status",
     cell: ({ row }) => (
       <div className="">
-        <span className="">{row.original.occupancyStatus}</span>
+        <Badge className={badgeOccupancyStatus(row.original.occupancyStatus)}>{row.original.occupancyStatus}</Badge>
       </div>
     ),
   },
