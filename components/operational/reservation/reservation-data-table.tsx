@@ -31,14 +31,7 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
 
-import {
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from "@/components/ui/table"
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table"
 import { ChevronDownIcon, Columns3Icon, PlusIcon } from "lucide-react"
 import { Button } from "@/components/ui/button"
 
@@ -61,16 +54,10 @@ interface DataTableProps<TData extends RowData> {
   showTableHead?: boolean
   data: TData[]
 }
-export function GroupedDataTable<TData extends RowData>({
-  data,
-  columns,
-}: DataTableProps<TData>) {
+export function GroupedDataTable<TData extends RowData>({ data, columns }: DataTableProps<TData>) {
   const [rowSelection, setRowSelection] = React.useState({})
-  const [columnVisibility, setColumnVisibility] =
-    React.useState<ColumnVisibilityState>({})
-  const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>(
-    []
-  )
+  const [columnVisibility, setColumnVisibility] = React.useState<ColumnVisibilityState>({})
+  const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>([])
   const [sorting, setSorting] = React.useState<SortingState>([])
   const [pagination, setPagination] = React.useState({
     pageIndex: 0,
@@ -109,20 +96,14 @@ export function GroupedDataTable<TData extends RowData>({
           <DropdownMenuContent align="end" className="w-32">
             {table
               .getAllColumns()
-              .filter(
-                (column) =>
-                  typeof column.accessorFn !== "undefined" &&
-                  column.getCanHide()
-              )
+              .filter((column) => typeof column.accessorFn !== "undefined" && column.getCanHide())
               .map((column) => {
                 return (
                   <DropdownMenuCheckboxItem
                     key={column.id}
                     className="capitalize"
                     checked={column.getIsVisible()}
-                    onCheckedChange={(value) =>
-                      column.toggleVisibility(!!value)
-                    }
+                    onCheckedChange={(value) => column.toggleVisibility(!!value)}
                   >
                     {
                       // misahkan atribut '_' dan parent object, biar cantik aja
@@ -149,9 +130,7 @@ export function GroupedDataTable<TData extends RowData>({
                 {headerGroup.headers.map((header) => {
                   return (
                     <TableHead key={header.id} colSpan={header.colSpan}>
-                      {header.isPlaceholder ? null : (
-                        <FlexRender header={header} />
-                      )}
+                      {header.isPlaceholder ? null : <FlexRender header={header} />}
                     </TableHead>
                   )
                 })}
@@ -168,18 +147,12 @@ export function GroupedDataTable<TData extends RowData>({
                   <TableRow key={row.id} className="h-14 bg-muted/50">
                     <TableCell colSpan={columns.length}>
                       <div key={row.id}>
-                        <span className="pl-3 font-bold">
-                          {new Date(getValue.date).toDateString()}
-                        </span>
+                        <span className="pl-3 font-bold">{new Date(getValue.date).toDateString()}</span>
                       </div>
                     </TableCell>
                   </TableRow>
                 ) : (
-                  <TableRow
-                    key={row.id}
-                    className=""
-                    data-state={row.getIsSelected() && "selected"}
-                  >
+                  <TableRow key={row.id} className="" data-state={row.getIsSelected() && "selected"}>
                     {row.getVisibleCells().map((cell) => {
                       return (
                         <TableCell className="" key={cell.id}>
@@ -192,15 +165,14 @@ export function GroupedDataTable<TData extends RowData>({
               })
             ) : (
               <TableRow>
-                <TableCell
-                  colSpan={columns.length}
-                  className="h-24 text-center"
-                >
+                <TableCell colSpan={columns.length} className="h-24 text-center">
                   No results.
                 </TableCell>
               </TableRow>
             )}
           </TableBody>
+
+          {/* ============================================================================== */}
         </Table>
       </div>
     </div>

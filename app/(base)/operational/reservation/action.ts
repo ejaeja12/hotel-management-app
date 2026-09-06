@@ -7,7 +7,8 @@ export async function getReservation(checkin: string, checkout: string) {
   // const tomorrow = `${checkout}T23:59:59.999Z`
   const tomorrow = getEndOfDay(checkout)
 
-  console.log("yesterday : ", yesterday, "tomorrow : ", tomorrow)
+  console.log("yesterday", yesterday)
+  console.log("tomorrow", tomorrow)
 
   const result = await getReservationByDate(yesterday, tomorrow)
   return result

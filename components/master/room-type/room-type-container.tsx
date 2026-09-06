@@ -6,23 +6,24 @@ import { Card, CardHeader, CardContent } from "@/components/ui/card"
 import { useMemo } from "react"
 // import { guestColumns, GuestColumnType } from "@/components/master/guest/guest-column"
 import { Button } from "@/components/ui/button"
-import { DialogStateType } from "./extra-charge-input"
-import { extraChargeColumns } from "./extra-charge-column"
+import { DialogStateType } from "./room-type-input"
+import { roomTypeColumns } from "./room-type-column"
 // import GuestFilter from "./guest-filter"
 import type { PaginationType } from "@/lib/types"
 import { ExtraChargeType } from "@/lib/validations/extra-charge-validation"
-import ExtraChargeFilter from "./extra-charge-filter"
-import ExtraChargeInput from "./extra-charge-input"
+// import ExtraChargeFilter from "./extra-charge-filter"
+import RoomTypeInput from "./room-type-input"
+import { TypeOfRoomType } from "@/lib/validations/room-type-validation"
 
 type Props = {
   data: {
-    data: ExtraChargeType[]
+    data: TypeOfRoomType[]
     meta: PaginationType
   }
   className?: string
 }
 
-export default function ExtraChargeContainer({ data, className = "" }: Props) {
+export default function RoomTypeContainer({ data, className = "" }: Props) {
   const [dialogState, setDialogState] = useState<DialogStateType>({
     isOpen: false,
     id: null,
@@ -44,7 +45,7 @@ export default function ExtraChargeContainer({ data, className = "" }: Props) {
 
   const column = useMemo(
     () =>
-      extraChargeColumns({
+      roomTypeColumns({
         onDelete: (id) => handleDialog("delete", id),
         onEdit: (id) => handleDialog("edit", id),
       }),
@@ -54,14 +55,14 @@ export default function ExtraChargeContainer({ data, className = "" }: Props) {
     <>
       {/* Dialog */}
       {/* <GuestInput dialogState={dialogState} onStateChange={() => handleDialog("close")}></GuestInput> */}
-      <ExtraChargeInput dialogState={dialogState} onStateChange={() => handleDialog("close")}></ExtraChargeInput>
+      <RoomTypeInput dialogState={dialogState} onStateChange={() => handleDialog("close")}></RoomTypeInput>
 
       {/* Table */}
 
       <Card className={`flex flex-col gap-8 ${className}`}>
         <CardHeader className="flex items-center justify-between">
-          <ExtraChargeFilter></ExtraChargeFilter>
-          <Button onClick={() => handleDialog("create")}>Create Extra Charge</Button>
+          {/* <ExtraChargeFilter></ExtraChargeFilter> */}
+          <Button onClick={() => handleDialog("create")}>Create Room Type</Button>
         </CardHeader>
         <CardContent>
           <DataTable data={data.data} columns={column} meta={data.meta} />

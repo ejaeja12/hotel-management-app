@@ -6,12 +6,7 @@ import { extraChargeData } from "./seeder/extraChargeSeeder"
 import { bookingTypeData } from "./seeder/bookingTypeSeeder"
 import { roomTypeData, roomData } from "./seeder/roomSeeder"
 import { guestData } from "./seeder/guestSeeder"
-import {
-  reservationData,
-  stayData,
-  invoiceData,
-  invoiceItemData,
-} from "./seeder/reservationSeeder"
+import { reservationData, stayData, invoiceData, invoiceItemData } from "./seeder/reservationSeeder"
 
 const connectionString = `${process.env.DATABASE_URL}`
 const pool = new Pool({ connectionString })

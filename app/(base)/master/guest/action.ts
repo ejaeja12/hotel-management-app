@@ -9,6 +9,7 @@ export type PrevState = {
   success: boolean
   action?: string
   error?: string
+  message?: string
 }
 
 export async function getGuest(idType: string = "", page: string = "") {

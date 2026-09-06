@@ -32,14 +32,14 @@ type GuestTableType = Pick<GuestType, "name" | "prefix">
 export type ReservationColumnType = {
   date?: string
   id?: string
-  stay?: StayType[]
-  guest?: GuestTableType
+  guestName?: string
+  roomName?: string
+  checkIn?: string
+  checkOut?: string
+  occupancyStatus?: string
 }
 
-const columnHelper = createColumnHelper<
-  TableFeaturesType,
-  ReservationColumnType
->()
+const columnHelper = createColumnHelper<TableFeaturesType, ReservationColumnType>()
 
 export const columns = columnHelper.columns([
   columnHelper.display({
@@ -55,46 +55,49 @@ export const columns = columnHelper.columns([
     ),
   },
   {
-    accessorKey: "guest.name",
-    accessorFn: (row) => (row.date ? null : row.guest?.name),
+    accessorKey: "guestName",
+    accessorFn: (row) => (row.date ? null : row.guestName),
     header: "Guest Name",
     cell: ({ row }) => (
       <div className="w-full">
-        <span className="text-left">{`${row.original.guest?.prefix}. ${row.original.guest?.name}`}</span>
+        <span className="text-left">{row.original.guestName}</span>
       </div>
     ),
   },
   {
-    accessorKey: "stay.0.room.name",
+    accessorKey: "roomName",
     header: "Room Number",
     cell: ({ row }) => (
       <div className="">
-        <span className="">{row.original.stay?.[0]?.room?.name}</span>
+        <span className="">{row.original.roomName}</span>
+      </div>
+    ),
+  },
+  {
+    accessorKey: "occupancyStatus",
+    header: "Status",
+    cell: ({ row }) => (
+      <div className="">
+        <span className="">{row.original.occupancyStatus}</span>
       </div>
     ),
   },
 
   {
-    accessorKey: "stay.0.checkIn",
+    accessorKey: "checkIn",
     header: "Check in",
     cell: ({ row }) => (
       <div className="">
-        <span className="">
-          {row.original.stay &&
-            new Date(row.original.stay[0]?.checkIn).toDateString()}
-        </span>
+        <span className="">{row.original.checkIn && new Date(row.original.checkIn).toDateString()}</span>
       </div>
     ),
   },
   {
-    accessorKey: "stay.0.checkOut",
+    accessorKey: "checkOut",
     header: "Check Out",
     cell: ({ row }) => (
       <div className="">
-        <span className="">
-          {row.original.stay &&
-            new Date(row.original.stay[0]?.checkOut).toDateString()}
-        </span>
+        <span className="">{row.original.checkOut && new Date(row.original.checkOut).toDateString()}</span>
       </div>
     ),
   },
@@ -105,11 +108,7 @@ export const columns = columnHelper.columns([
       <DropdownMenu>
         <DropdownMenuTrigger
           render={
-            <Button
-              variant="ghost"
-              className="flex size-8 text-muted-foreground data-open:bg-muted"
-              size="icon"
-            />
+            <Button variant="ghost" className="flex size-8 text-muted-foreground data-open:bg-muted" size="icon" />
           }
         >
           <EllipsisVerticalIcon />

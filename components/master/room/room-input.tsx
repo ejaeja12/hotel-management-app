@@ -3,17 +3,17 @@
 import React, { useState, useEffect, useActionState } from "react"
 import { Dialog, DialogContent, DialogFooter, DialogHeader, DialogClose, DialogOverlay } from "@/components/ui/dialog"
 import { Button } from "@/components/ui/button"
-import { showGuest, createGuest, editGuest } from "@/app/(base)/master/guest/action"
-import { guestValidation } from "@/lib/validations/guest-validation"
-import { Prefix, IdentificationType } from "@/generated/prisma/enums"
 
-import { GuestType } from "@/lib/validations/guest-validation"
+import { createRoom, showRoom, editRoom, getRoomType } from "@/app/(base)/master/room/rooms/action"
+import { TypeOfRoom, RoomValidationType, roomValidation } from "@/lib/validations/room-validation"
+
+import { ActivationStatus } from "@/generated/prisma/enums"
 import { useUpdateDifferences } from "@/hooks/use-update-differences"
 import { toastSuccess, toastError } from "@/components/toast-status"
 import { Spinner } from "@/components/ui/spinner"
-import { MoveRightIcon } from "lucide-react"
-import InputField from "@/components/input-field"
 import SelectField from "@/components/select-field"
+import InputField from "@/components/input-field"
+import { MoveRightIcon } from "lucide-react"
 
 export type DialogStateType = {
   isOpen: boolean
@@ -25,7 +25,7 @@ type Props = {
   dialogState: DialogStateType
   onStateChange?: () => void
 }
-export default function GuestInput({ dialogState, onStateChange = () => {} }: Props) {
+export default function RoomInput({ dialogState, onStateChange = () => {} }: Props) {
   return (
     <div>
       <Dialog open={dialogState.isOpen} onOpenChange={onStateChange}>
@@ -44,94 +44,75 @@ export default function GuestInput({ dialogState, onStateChange = () => {} }: Pr
 
 type FieldFormProps = {
   actionSubmit?: () => void
-  data: GuestType
-  onChangeData: (e: GuestType) => void
+  data: TypeOfRoom
+  onChangeData: (e: TypeOfRoom) => void
+  isCreate?: boolean
 }
 
-function FieldForm({ data, onChangeData }: FieldFormProps) {
-  const idTypeItems = [
-    { value: IdentificationType.ktp, label: "KTP" },
-    { value: IdentificationType.passport, label: "Passport" },
-  ]
-  const prefixItems = [
-    { value: Prefix.Mr, label: "Mr" },
-    { value: Prefix.Ms, label: "Ms" },
-    { value: Prefix.Mrs, label: "Mrs" },
-  ]
+function FieldForm({ data, onChangeData, isCreate = false }: FieldFormProps) {
+  const [roomTypeItems, setRoomTypeItems] = useState<{ value: string; label: string }[]>([])
+
+  useEffect(() => {
+    async function getRoomTypeList() {
+      if (isCreate) {
+        const roomType = await getRoomType()
+        const roomTypeList =
+          roomType.data.length > 0
+            ? roomType.data.map((item) => ({
+                value: item.id,
+                label: item.name,
+              }))
+            : []
+        setRoomTypeItems(roomTypeList)
+      }
+    }
+
+    getRoomTypeList()
+  }, [isCreate])
+
   return (
     <>
       <div className="flex flex-col gap-10 px-5 py-5">
         <div className="grid grid-cols-12 gap-5">
-          {/* Prefix */}
+          {/* Name*/}
 
-          <SelectField
-            label="Prefix"
-            className="col-span-4"
-            value={data.prefix}
-            onValueChange={(e) => onChangeData({ ...data, prefix: e })}
-            name="prefix"
-            selectItems={prefixItems}
-          />
-
-          {/* Guest Name */}
           <InputField
-            className="col-span-8"
+            className={`${isCreate ? "col-span-8" : "col-span-12"}`}
             label="name"
             inputName="name"
             value={data.name}
             onChange={(e) => onChangeData({ ...data, name: e.target.value })}
           ></InputField>
+
+          {/* Select RoomType */}
+          {isCreate && (
+            <SelectField
+              label="Room Type"
+              selectItems={roomTypeItems}
+              name="room-type"
+              value={data.typeId}
+              className="col-span-4"
+              onValueChange={(e) => onChangeData({ ...data, typeId: e })}
+            ></SelectField>
+          )}
         </div>
-
-        <div className="grid grid-cols-12 gap-5">
-          {/* ID Type */}
-          <SelectField
-            label="ID Type"
-            className="col-span-4"
-            value={data.identificationType}
-            onValueChange={(e) => onChangeData({ ...data, identificationType: e })}
-            name="identificationType"
-            selectItems={idTypeItems}
-          />
-
-          {/* ID Number */}
-          <InputField
-            className="col-span-8"
-            label="ID numbers"
-            inputName="identificationNumber"
-            value={data.identificationNumber}
-            onChange={(e) => onChangeData({ ...data, identificationNumber: e.target.value })}
-          ></InputField>
-        </div>
-
-        {/* Phone */}
-        <InputField
-          className="col-span-8"
-          label="Phones"
-          inputName="identificationNumber"
-          value={data.phone}
-          onChange={(e) => onChangeData({ ...data, phone: e.target.value })}
-        ></InputField>
       </div>
     </>
   )
 }
 
 function CreateField({ onStateChange }: { onStateChange: () => void }) {
-  const [state, formAction, isPending] = useActionState(createGuest, {
+  const [state, formAction, isPending] = useActionState(createRoom, {
     success: false,
     action: "",
     error: "",
     message: "",
   })
 
-  const [formValues, setformValues] = useState<GuestType>({
+  const [formValues, setformValues] = useState<TypeOfRoom>({
     id: "", // di action create sebenarnya ga pake id. ini di inisiasi buat nyenengin type safety aj
-    prefix: "",
+    typeId: "",
     name: "",
-    phone: "",
-    identificationNumber: "",
-    identificationType: "",
   })
 
   useEffect(() => {
@@ -143,7 +124,7 @@ function CreateField({ onStateChange }: { onStateChange: () => void }) {
   }, [state, onStateChange])
 
   function handleSubmit() {
-    const result = guestValidation.safeParse(formValues)
+    const result = roomValidation.safeParse(formValues)
 
     if (!result.success) {
       const err = result.error.issues[0].message
@@ -156,7 +137,7 @@ function CreateField({ onStateChange }: { onStateChange: () => void }) {
     <>
       <DialogHeader className="text-lg">Create Guest</DialogHeader>
       <form id="guest-form" action={handleSubmit}>
-        <FieldForm data={formValues} onChangeData={setformValues}></FieldForm>
+        <FieldForm data={formValues} onChangeData={setformValues} isCreate></FieldForm>
       </form>
       <DialogFooter>
         <DialogClose render={<Button>Cancel</Button>}></DialogClose>
@@ -171,22 +152,19 @@ function CreateField({ onStateChange }: { onStateChange: () => void }) {
 }
 
 function EditField({ id, onStateChange }: { id: string; onStateChange: () => void }) {
-  const [state, formAction, isPending] = useActionState(editGuest, {
+  const [state, formAction, isPending] = useActionState(editRoom, {
     success: false,
     action: "",
     error: "",
     message: "",
   })
 
-  const [initialFormValues, setInitialFormValues] = useState<GuestType | null>(null)
+  const [initialFormValues, setInitialFormValues] = useState<TypeOfRoom | null>(null)
 
-  const [formValues, setFormValues] = useState<GuestType>({
-    id: "",
-    prefix: "",
+  const [formValues, setformValues] = useState<TypeOfRoom>({
+    id: "", // di action create sebenarnya ga pake id. ini di inisiasi buat nyenengin type safety aj
+    typeId: "",
     name: "",
-    phone: "",
-    identificationNumber: "",
-    identificationType: "",
   })
 
   const updateDiff = useUpdateDifferences(initialFormValues, formValues)
@@ -201,17 +179,17 @@ function EditField({ id, onStateChange }: { id: string; onStateChange: () => voi
     if (state.error) return toastError("Error", state.error ?? "Error")
 
     async function fetchGuest() {
-      const data = id ? await showGuest(id) : null
-      if (data) {
-        setInitialFormValues(data)
-        setFormValues(data)
+      const roomData = id ? await showRoom(id) : null
+      if (roomData) {
+        setInitialFormValues(roomData)
+        setformValues(roomData)
       }
     }
 
     fetchGuest()
   }, [id, state, onStateChange])
 
-  // Ini supaya field name di dialog confirm guest key nya rapi
+  // Ini supaya di dialog confirm guest key nya rapi
   function makeGuestKeyReadable(par: string) {
     switch (par) {
       case "identificationNumber":
@@ -224,7 +202,7 @@ function EditField({ id, onStateChange }: { id: string; onStateChange: () => voi
   }
 
   function handleSubmit() {
-    const result = guestValidation.safeParse(formValues)
+    const result = roomValidation.safeParse(formValues)
 
     if (!result.success) {
       const err = result.error.issues[0].message
@@ -237,7 +215,7 @@ function EditField({ id, onStateChange }: { id: string; onStateChange: () => voi
     <>
       <DialogHeader className="text-lg">Edit Guest Data</DialogHeader>
       <form id="guest-form" action={handleSubmit}>
-        <FieldForm data={formValues} onChangeData={setFormValues}></FieldForm>
+        <FieldForm data={formValues} onChangeData={setformValues}></FieldForm>
       </form>
       <DialogFooter>
         <DialogClose render={<Button>Cancel</Button>}></DialogClose>
@@ -271,11 +249,11 @@ function EditField({ id, onStateChange }: { id: string; onStateChange: () => voi
             Object.keys(updateDiff.changedValue).map((k, i) => (
               <div key={i} className="grid w-full grid-cols-12 border-b pb-2">
                 <span className="col-span-3 text-center font-bold">{makeGuestKeyReadable(k)}</span>
-                <span className="col-span-3 text-center">{initialFormValues[k as keyof GuestType]}</span>
+                <span className="col-span-3 text-center">{initialFormValues[k as keyof TypeOfRoom]}</span>
                 <span className="col-span-3 flex justify-center text-center">
                   <MoveRightIcon />
                 </span>
-                <span className="col-span-3 text-center">{formValues[k as keyof GuestType]}</span>
+                <span className="col-span-3 text-center">{formValues[k as keyof TypeOfRoom]}</span>
               </div>
             ))}
         </div>

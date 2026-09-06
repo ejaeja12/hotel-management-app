@@ -63,6 +63,7 @@ export async function createGuestService(data: GuestValidationType) {
     return {
       success: true,
       action: "create",
+      message: "Guest Created",
     }
   } catch (e) {
     console.log(e)
@@ -91,6 +92,7 @@ export async function editGuestService(id: string, data: GuestValidationType) {
     return {
       success: true,
       action: "update",
+      message: "Guest Updated",
     }
   } catch (e) {
     if (e instanceof Prisma.PrismaClientKnownRequestError) {

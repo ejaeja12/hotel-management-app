@@ -3,10 +3,7 @@
 import React, { useState, useEffect, useActionState } from "react"
 import { Dialog, DialogContent, DialogFooter, DialogHeader, DialogClose, DialogOverlay } from "@/components/ui/dialog"
 import { Button } from "@/components/ui/button"
-import { Input } from "@/components/ui/input"
-import { Field, FieldLabel } from "@/components/ui/field"
-import { Select, SelectItem, SelectContent, SelectTrigger, SelectValue } from "@/components/ui/select"
-import { showGuest, createGuest, editGuest } from "@/app/(base)/master/guest/action"
+
 import { createExtraCharge, showExtraCharge, editExtraCharge } from "@/app/(base)/master/extracharge/action"
 import { ExtraChargeType, extraChargeValidation } from "@/lib/validations/extra-charge-validation"
 import InputCurrency from "@/components/input-currency"
@@ -101,6 +98,7 @@ function CreateField({ onStateChange }: { onStateChange: () => void }) {
     success: false,
     action: "",
     error: "",
+    message: "",
   })
 
   const [formValues, setformValues] = useState<ExtraChargeType>({
@@ -113,10 +111,10 @@ function CreateField({ onStateChange }: { onStateChange: () => void }) {
 
   useEffect(() => {
     if (state.success) {
-      toastSuccess("Success", state.action === "create" ? "Guest Data Created" : "Guest Data Updated")
+      toastSuccess("Success", state.message)
       return onStateChange()
     }
-    if (state.error) toastError("Error", state.error ?? "Error")
+    if (state.error) return toastError("Error", state.error ?? "Error")
   }, [state, onStateChange])
 
   function handleSubmit() {
@@ -152,6 +150,7 @@ function EditField({ id, onStateChange }: { id: string; onStateChange: () => voi
     success: false,
     action: "",
     error: "",
+    message: "",
   })
 
   const [initialFormValues, setInitialFormValues] = useState<ExtraChargeType | null>(null)
@@ -169,7 +168,7 @@ function EditField({ id, onStateChange }: { id: string; onStateChange: () => voi
 
   useEffect(() => {
     if (state.success) {
-      toastSuccess("Success", "Guest Data Updated")
+      toastSuccess("Success", state.message)
       return onStateChange()
     }
     if (state.error) return toastError("Error", state.error ?? "Error")

@@ -3,17 +3,18 @@
 import React, { useState, useEffect, useActionState } from "react"
 import { Dialog, DialogContent, DialogFooter, DialogHeader, DialogClose, DialogOverlay } from "@/components/ui/dialog"
 import { Button } from "@/components/ui/button"
-import { showGuest, createGuest, editGuest } from "@/app/(base)/master/guest/action"
-import { guestValidation } from "@/lib/validations/guest-validation"
-import { Prefix, IdentificationType } from "@/generated/prisma/enums"
 
-import { GuestType } from "@/lib/validations/guest-validation"
+import { createRoomType, showRoomType, editRoomType } from "@/app/(base)/master/room/room-type/action"
+import { TypeOfRoomType, RoomTypeValidationType, roomTypeValidation } from "@/lib/validations/room-type-validation"
+import InputCurrency from "@/components/input-currency"
+import { ActivationStatus } from "@/generated/prisma/enums"
+import ColorPicker from "@/components/color-picker"
 import { useUpdateDifferences } from "@/hooks/use-update-differences"
 import { toastSuccess, toastError } from "@/components/toast-status"
 import { Spinner } from "@/components/ui/spinner"
-import { MoveRightIcon } from "lucide-react"
-import InputField from "@/components/input-field"
 import SelectField from "@/components/select-field"
+import InputField from "@/components/input-field"
+import { MoveRightIcon } from "lucide-react"
 
 export type DialogStateType = {
   isOpen: boolean
@@ -25,7 +26,7 @@ type Props = {
   dialogState: DialogStateType
   onStateChange?: () => void
 }
-export default function GuestInput({ dialogState, onStateChange = () => {} }: Props) {
+export default function RoomTypeInput({ dialogState, onStateChange = () => {} }: Props) {
   return (
     <div>
       <Dialog open={dialogState.isOpen} onOpenChange={onStateChange}>
@@ -44,36 +45,22 @@ export default function GuestInput({ dialogState, onStateChange = () => {} }: Pr
 
 type FieldFormProps = {
   actionSubmit?: () => void
-  data: GuestType
-  onChangeData: (e: GuestType) => void
+  data: TypeOfRoomType
+  onChangeData: (e: TypeOfRoomType) => void
 }
 
 function FieldForm({ data, onChangeData }: FieldFormProps) {
-  const idTypeItems = [
-    { value: IdentificationType.ktp, label: "KTP" },
-    { value: IdentificationType.passport, label: "Passport" },
+  const statusActivationItems = [
+    { value: ActivationStatus.active, label: "Active" },
+    { value: ActivationStatus.nonactive, label: "Non Active" },
   ]
-  const prefixItems = [
-    { value: Prefix.Mr, label: "Mr" },
-    { value: Prefix.Ms, label: "Ms" },
-    { value: Prefix.Mrs, label: "Mrs" },
-  ]
+
   return (
     <>
       <div className="flex flex-col gap-10 px-5 py-5">
         <div className="grid grid-cols-12 gap-5">
-          {/* Prefix */}
+          {/* Name*/}
 
-          <SelectField
-            label="Prefix"
-            className="col-span-4"
-            value={data.prefix}
-            onValueChange={(e) => onChangeData({ ...data, prefix: e })}
-            name="prefix"
-            selectItems={prefixItems}
-          />
-
-          {/* Guest Name */}
           <InputField
             className="col-span-8"
             label="name"
@@ -81,57 +68,43 @@ function FieldForm({ data, onChangeData }: FieldFormProps) {
             value={data.name}
             onChange={(e) => onChangeData({ ...data, name: e.target.value })}
           ></InputField>
-        </div>
 
-        <div className="grid grid-cols-12 gap-5">
-          {/* ID Type */}
-          <SelectField
-            label="ID Type"
+          <ColorPicker
+            value={data.color}
+            onChangeValue={(e) => onChangeData({ ...data, color: e })}
+            label="Room Color"
             className="col-span-4"
-            value={data.identificationType}
-            onValueChange={(e) => onChangeData({ ...data, identificationType: e })}
-            name="identificationType"
-            selectItems={idTypeItems}
-          />
+          ></ColorPicker>
 
-          {/* ID Number */}
-          <InputField
-            className="col-span-8"
-            label="ID numbers"
-            inputName="identificationNumber"
-            value={data.identificationNumber}
-            onChange={(e) => onChangeData({ ...data, identificationNumber: e.target.value })}
-          ></InputField>
+          <div className="grid grid-cols-12 gap-5">
+            {/* Price*/}
+
+            <InputCurrency
+              className={`col-span-12`}
+              label="Price"
+              displayValue={data.price}
+              handleInput={(e) => onChangeData({ ...data, price: Number(e) })}
+            ></InputCurrency>
+          </div>
         </div>
-
-        {/* Phone */}
-        <InputField
-          className="col-span-8"
-          label="Phones"
-          inputName="identificationNumber"
-          value={data.phone}
-          onChange={(e) => onChangeData({ ...data, phone: e.target.value })}
-        ></InputField>
       </div>
     </>
   )
 }
 
 function CreateField({ onStateChange }: { onStateChange: () => void }) {
-  const [state, formAction, isPending] = useActionState(createGuest, {
+  const [state, formAction, isPending] = useActionState(createRoomType, {
     success: false,
     action: "",
     error: "",
     message: "",
   })
 
-  const [formValues, setformValues] = useState<GuestType>({
+  const [formValues, setformValues] = useState<TypeOfRoomType>({
     id: "", // di action create sebenarnya ga pake id. ini di inisiasi buat nyenengin type safety aj
-    prefix: "",
     name: "",
-    phone: "",
-    identificationNumber: "",
-    identificationType: "",
+    price: 0,
+    color: "",
   })
 
   useEffect(() => {
@@ -143,7 +116,7 @@ function CreateField({ onStateChange }: { onStateChange: () => void }) {
   }, [state, onStateChange])
 
   function handleSubmit() {
-    const result = guestValidation.safeParse(formValues)
+    const result = roomTypeValidation.safeParse(formValues)
 
     if (!result.success) {
       const err = result.error.issues[0].message
@@ -171,22 +144,20 @@ function CreateField({ onStateChange }: { onStateChange: () => void }) {
 }
 
 function EditField({ id, onStateChange }: { id: string; onStateChange: () => void }) {
-  const [state, formAction, isPending] = useActionState(editGuest, {
+  const [state, formAction, isPending] = useActionState(editRoomType, {
     success: false,
     action: "",
     error: "",
     message: "",
   })
 
-  const [initialFormValues, setInitialFormValues] = useState<GuestType | null>(null)
+  const [initialFormValues, setInitialFormValues] = useState<TypeOfRoomType | null>(null)
 
-  const [formValues, setFormValues] = useState<GuestType>({
+  const [formValues, setformValues] = useState<TypeOfRoomType>({
     id: "",
-    prefix: "",
     name: "",
-    phone: "",
-    identificationNumber: "",
-    identificationType: "",
+    price: 0,
+    color: "",
   })
 
   const updateDiff = useUpdateDifferences(initialFormValues, formValues)
@@ -201,17 +172,17 @@ function EditField({ id, onStateChange }: { id: string; onStateChange: () => voi
     if (state.error) return toastError("Error", state.error ?? "Error")
 
     async function fetchGuest() {
-      const data = id ? await showGuest(id) : null
-      if (data) {
-        setInitialFormValues(data)
-        setFormValues(data)
+      const roomTypeData = id ? await showRoomType(id) : null
+      if (roomTypeData) {
+        setInitialFormValues(roomTypeData)
+        setformValues(roomTypeData)
       }
     }
 
     fetchGuest()
   }, [id, state, onStateChange])
 
-  // Ini supaya field name di dialog confirm guest key nya rapi
+  // Ini supaya di dialog confirm guest key nya rapi
   function makeGuestKeyReadable(par: string) {
     switch (par) {
       case "identificationNumber":
@@ -224,7 +195,7 @@ function EditField({ id, onStateChange }: { id: string; onStateChange: () => voi
   }
 
   function handleSubmit() {
-    const result = guestValidation.safeParse(formValues)
+    const result = roomTypeValidation.safeParse(formValues)
 
     if (!result.success) {
       const err = result.error.issues[0].message
@@ -237,7 +208,7 @@ function EditField({ id, onStateChange }: { id: string; onStateChange: () => voi
     <>
       <DialogHeader className="text-lg">Edit Guest Data</DialogHeader>
       <form id="guest-form" action={handleSubmit}>
-        <FieldForm data={formValues} onChangeData={setFormValues}></FieldForm>
+        <FieldForm data={formValues} onChangeData={setformValues}></FieldForm>
       </form>
       <DialogFooter>
         <DialogClose render={<Button>Cancel</Button>}></DialogClose>
@@ -271,11 +242,11 @@ function EditField({ id, onStateChange }: { id: string; onStateChange: () => voi
             Object.keys(updateDiff.changedValue).map((k, i) => (
               <div key={i} className="grid w-full grid-cols-12 border-b pb-2">
                 <span className="col-span-3 text-center font-bold">{makeGuestKeyReadable(k)}</span>
-                <span className="col-span-3 text-center">{initialFormValues[k as keyof GuestType]}</span>
+                <span className="col-span-3 text-center">{initialFormValues[k as keyof TypeOfRoomType]}</span>
                 <span className="col-span-3 flex justify-center text-center">
                   <MoveRightIcon />
                 </span>
-                <span className="col-span-3 text-center">{formValues[k as keyof GuestType]}</span>
+                <span className="col-span-3 text-center">{formValues[k as keyof TypeOfRoomType]}</span>
               </div>
             ))}
         </div>

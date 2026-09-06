@@ -1,10 +1,7 @@
 import { db } from "../db"
 
 export async function getReservationByDate(startDate: string, endDate: string) {
-  /**
-   * ambil stay untuk dapat data check in dan checkout dulu
-   */
-  const stayD = await db.stay.findMany({
+  const reservationData = db.stay.findMany({
     where: {
       OR: [
         {
@@ -21,60 +18,63 @@ export async function getReservationByDate(startDate: string, endDate: string) {
         },
       ],
     },
-  })
-
-  /**
-   * ambil checkin yang unik (buang duplikat) untuk di-groupkan nanti
-   */
-
-  const getArrayDate = [
-    ...new Set(stayD.map((stay) => stay.checkIn.toISOString().split("T")[0])),
-  ]
-
-  /**
-   * ambil data reservation
-   */
-
-  const reservation = await db.reservation.findMany({
-    where: {
-      id: {
-        in: stayD.map((st) => st.reservationId),
-      },
-    },
     include: {
-      stay: {
-        select: {
-          id: true,
-          checkIn: true,
-          checkOut: true,
-          room: {
+      reservation: {
+        include: {
+          guest: {
             select: {
-              id: true,
               name: true,
+              prefix: true,
             },
           },
         },
       },
-      guest: {
+      room: {
         select: {
           name: true,
-          prefix: true,
         },
       },
     },
   })
 
-  /**
-   * peng-groupan duniawi, groupkan reservasi berdasarkan data check in
-   */
+  function setRoomStatus(checkin: Date, checkout: Date, checkinAt?: Date, checkoutAt?: Date) {
+    const checkinDate = new Date(checkin)
+    const checkoutDate = new Date(checkout)
+    const checkInAt = checkinAt ? new Date(checkinAt) : null
+    const checkOutAt = checkoutAt ? new Date(checkoutAt) : null
 
-  const result = getArrayDate.map((date) => ({
-    date: date,
-    reservation: reservation.filter((reservation) =>
-      reservation.stay.some(
-        (st) => st.checkIn.toISOString().split("T")[0] === date
-      )
-    ),
+    const now = new Date()
+
+    if (now >= checkinDate && now <= checkoutDate) {
+      if (!checkInAt) {
+        return "checkin"
+      }
+
+      if (now >= checkInAt) {
+        return "inhouse"
+      }
+    }
+
+    if (now > checkoutDate) {
+      if (!checkOutAt) {
+        return "checkout"
+      }
+
+      if (now > checkOutAt) {
+        return "already_checkout"
+      }
+    }
+
+    return "available"
+  }
+
+  const result = (await reservationData).map((r) => ({
+    id: r.id,
+    guestName: `${r.reservation.guest.prefix} ${r.reservation.guest.name}`,
+    roomName: r.room.name,
+    checkIn: r.checkIn,
+    checkOut: r.checkOut,
+    occupancyStatus: setRoomStatus(r.checkIn, r.checkOut, r.checkInAt ?? undefined, r.checkOutAt ?? undefined),
   }))
 
   return result

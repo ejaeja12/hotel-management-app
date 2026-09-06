@@ -60,6 +60,7 @@ export async function createExtraChargeService(data: ExtraChargeValidationType) 
     return {
       success: true,
       action: "create",
+      message: "Extra Charge Created",
     }
   } catch (e) {
     console.log(e)
@@ -86,6 +87,7 @@ export async function editExtraChargeService(id: string, data: ExtraChargeValida
     return {
       success: true,
       action: "update",
+      message: "Extra Charge Updated",
     }
   } catch (e) {
     if (e instanceof Prisma.PrismaClientKnownRequestError) {

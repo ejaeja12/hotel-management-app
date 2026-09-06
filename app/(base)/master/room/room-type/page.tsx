@@ -1,7 +1,13 @@
-export default function RoomTypePage() {
+import { getroomType } from "./action"
+import RoomTypeContainer from "@/components/master/room-type/room-type-container"
+
+export default async function ExtraChargePage({ searchParams }: { searchParams: Promise<{ page: string }> }) {
+  const { page } = await searchParams
+  const result = await getroomType(page)
+
   return (
-    <div className="max-h-[calc(100vh-var(--height-nav-header))] overflow-x-auto">
-      THis is Room Type page
+    <div className="flex w-full justify-center">
+      <RoomTypeContainer className="w-full" data={result}></RoomTypeContainer>
     </div>
   )
 }
