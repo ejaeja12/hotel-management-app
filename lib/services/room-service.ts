@@ -56,27 +56,41 @@ export async function getRoomService(page = "") {
   function setRoomStatus(checkin: Date, checkout: Date, checkinAt?: Date, checkoutAt?: Date) {
     const checkinDate = new Date(checkin)
     const checkoutDate = new Date(checkout)
-    const checkInAt = checkinAt ? new Date(checkinAt) : null
-    const checkOutAt = checkoutAt ? new Date(checkoutAt) : null
 
     const now = new Date()
 
-    if (now >= checkinDate && now <= checkoutDate) {
-      if (!checkInAt) {
-        return "checkin"
-      }
+    const limitCheckIn = new Date(checkinDate.getTime() + 12 * 60 * 60 * 1000)
+    const limitCheckOut = new Date(checkoutDate.getTime() + 12 * 60 * 60 * 1000)
 
-      if (now >= checkInAt) {
+    // tesCheckin.setUTCHours(5, 0, 0, 0)
+
+    // cek apakah tanggal sekarang ada dalam range
+    const isInDateRange = checkinDate <= now && now <= checkoutDate
+    // cek apa waktu sekarang sudah melewati batas checkin
+    const isLateCheckin = now > limitCheckIn
+    // cek apakah checkinAt ada, dan
+    const isSetCheckinAt = checkinAt ? new Date(checkinAt) : null
+    // cek apakah tanggal sudah masuk masa checkout
+    const isInCheckoutTime = now > checkoutDate
+    // cek apa waktu sekarang sudah melewati batas checkout
+    const isLateCheckout = now > limitCheckOut
+    // check apakah checkoutAt sudah ada
+    const isSetCheckoutAt = checkoutAt ? new Date(checkoutAt) : null
+
+    if (isInDateRange) {
+      if (!isSetCheckinAt) {
+        if (isLateCheckin) return "late-checkin"
+        return "checkin"
+      } else {
         return "inhouse"
       }
     }
 
-    if (now > checkoutDate) {
-      if (!checkOutAt) {
+    if (isInCheckoutTime) {
+      if (!isSetCheckoutAt) {
+        if (isLateCheckout) return "late-checkout"
         return "checkout"
-      }
-
-      if (now > checkOutAt) {
+      } else {
         return "already_checkout"
       }
     }

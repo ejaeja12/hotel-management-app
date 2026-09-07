@@ -35,6 +35,8 @@ export default async function Reservation({
     []
   )
 
+  console.log("grouped data reserv", flattenData)
+
   return (
     <>
       <Card className="flex flex-col p-3">

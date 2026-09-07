@@ -1,38 +1,6 @@
-import { db } from "../db"
+import { db } from "@/lib/db"
 
-export async function getReservationByDate(startDate: string, endDate: string) {
-  const reservationData = db.stay.findMany({
-    where: {
-      checkIn: {
-        gte: startDate,
-        lte: endDate,
-      },
-    },
-    orderBy: { checkIn: "asc" },
-    include: {
-      reservation: {
-        include: {
-          guest: {
-            select: {
-              name: true,
-              prefix: true,
-            },
-          },
-        },
-      },
-      room: {
-        select: {
-          name: true,
-          roomType: {
-            select: {
-              color: true,
-            },
-          },
-        },
-      },
-    },
-  })
-
+export async function getReservationCalendarData() {
   function setRoomStatus(checkin: Date, checkout: Date, checkinAt?: Date, checkoutAt?: Date) {
     const checkinDate = new Date(checkin)
     const checkoutDate = new Date(checkout)
@@ -78,15 +46,56 @@ export async function getReservationByDate(startDate: string, endDate: string) {
     return "available"
   }
 
-  const result = (await reservationData).map((r) => ({
-    id: r.id,
-    guestName: `${r.reservation.guest.prefix} ${r.reservation.guest.name}`,
-    roomName: r.room.name,
-    roomColor: r.room.roomType.color,
-    checkIn: r.checkIn,
-    checkOut: r.checkOut,
-    occupancyStatus: setRoomStatus(r.checkIn, r.checkOut, r.checkInAt ?? undefined, r.checkOutAt ?? undefined),
+  const reservationList = await db.stay.findMany({
+    orderBy: { createdAt: "desc" },
+    select: {
+      checkIn: true,
+      checkOut: true,
+      checkInAt: true,
+      checkOutAt: true,
+      reservation: {
+        select: { id: true, guest: { select: { name: true, prefix: true } } },
+      },
+      room: {
+        select: { id: true },
+      },
+    },
+  })
+
+  const roomTypeList = await db.roomType.findMany({
+    select: {
+      id: true,
+      name: true,
+      color: true,
+      room: {
+        select: { id: true, name: true },
+      },
+    },
+  })
+
+  const reservationData = reservationList.map((item) => ({
+    id: item.reservation.id,
+    guest: `${item.reservation.guest.prefix ? item.reservation.guest.prefix + " " : ""}${item.reservation.guest.name}`,
+    status: setRoomStatus(item.checkIn, item.checkOut, item.checkInAt ?? undefined, item.checkOutAt ?? undefined),
+    start: new Date(item.checkIn).toISOString(),
+    end: new Date(item.checkOut).toISOString(),
+    room: {
+      id: item.room.id,
+    },
   }))
 
-  return result
+  const roomTypeData = roomTypeList.map((item) => ({
+    id: item.id,
+    name: item.name,
+    color: item.color,
+    room: item.room.map((room) => ({
+      id: room.id,
+      name: room.name,
+    })),
+  }))
+
+  return {
+    reservationData,
+    roomTypeData,
+  }
 }

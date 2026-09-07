@@ -6,44 +6,101 @@ export const roomTypeData = [
     price: 100000,
   },
   {
-    id: "SDL",
+    id: "SDEL",
     name: "Super Deluxe",
-    color: "#2563EB",
+    color: "#7C3AED",
     price: 200000,
   },
   {
-    id: "DBL",
-    name: "Double",
-    color: "#46a142",
+    id: "FAM",
+    name: "Family",
+    color: "#cc5500",
     price: 350000,
   },
   {
-    id: "SUIT",
-    name: "Suite",
-    color: "#7C3AED",
+    id: "STDR",
+    name: "Studio Room",
+    color: "#328a49",
+    price: 500000,
+  },
+  {
+    id: "HNMS",
+    name: "Honeymoon Suite",
+    color: "#2563EB",
     price: 500000,
   },
 ]
 
 export const roomData = [
   {
-    id: "DEL01234",
+    id: "DEL1",
     name: "Deluxe 01",
     typeId: "DEL",
   },
   {
-    id: "SDL15184",
+    id: "DEL2",
+    name: "Deluxe 02",
+    typeId: "DEL",
+  },
+  {
+    id: "DEL3",
+    name: "Deluxe 03",
+    typeId: "DEL",
+  },
+  // ===================
+  {
+    id: "SDEL1",
     name: "Super Deluxe 01",
-    typeId: "SDL",
+    typeId: "SDEL",
   },
   {
-    id: "DBL1541213",
-    name: "Double 01",
-    typeId: "DBL",
+    id: "SDEL2",
+    name: "Super Deluxe 02",
+    typeId: "SDEL",
   },
   {
-    id: "SUIT131561",
-    name: "Suite 01",
-    typeId: "SUIT",
+    id: "SDEL3",
+    name: "Super Deluxe 03",
+    typeId: "SDEL",
+  },
+  // ============================
+  {
+    id: "FAM1",
+    name: "Family 01",
+    typeId: "FAM",
+  },
+  {
+    id: "FAM2",
+    name: "Family 02",
+    typeId: "FAM",
+  },
+  {
+    id: "FAM3",
+    name: "Family 03",
+    typeId: "FAM",
+  },
+
+  // =======================
+  {
+    id: "STDR1",
+    name: "Studio Room 01",
+    typeId: "STDR",
+  },
+  {
+    id: "STDR2",
+    name: "Studio Room 02",
+    typeId: "STDR",
+  },
+
+  //============================
+  {
+    id: "HNMS1",
+    name: "Honeymoon Suite 01",
+    typeId: "HNMS",
+  },
+  {
+    id: "HNMS2",
+    name: "Honeymoon Suite 02",
+    typeId: "HNMS",
   },
 ]

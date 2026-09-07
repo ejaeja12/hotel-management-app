@@ -48,7 +48,7 @@ const data = {
     },
     {
       title: "Reservation",
-      url: `/operational/reservation?checkin=${getYesterdayDate()}&checkout=${getTomorrowDate()}`,
+      url: `/operational/reservation?checkin=${getYesterdayDate(5)}&checkout=${getTomorrowDate(30)}`,
       icon: <ListIcon />,
     },
     {
@@ -161,11 +161,7 @@ export function AppSidebar({
   ...props
 }: React.ComponentProps<typeof Sidebar> & { children: React.ReactNode }) {
   return (
-    <Sidebar
-      className="fixed top-below-header! h-screen w-fit"
-      collapsible="icon"
-      {...props}
-    >
+    <Sidebar className="fixed top-below-header! h-screen w-fit" collapsible="icon" {...props}>
       <SidebarHeader className="flex flex-row justify-end py-0">
         <SidebarTrigger></SidebarTrigger>
       </SidebarHeader>

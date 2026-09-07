@@ -28,27 +28,39 @@ export function getEndOfDay(par: string = "") {
   return date.toISOString()
 }
 
-export function getYesterdayDate() {
+export function getYesterdayDate(range: number = 30) {
   const date = new Date()
-  date.setDate(date.getDate() - 2)
+  date.setDate(date.getDate() - range)
   return date.toLocaleDateString("sv-SE", { timeZone: "Asia/Jakarta" })
 }
 
-export function getTomorrowDate() {
+export function getTomorrowDate(range: number = 30) {
   const date = new Date()
-  date.setDate(date.getDate() + 2)
+  date.setDate(date.getDate() + range)
 
   return date.toLocaleDateString("sv-SE", { timeZone: "Asia/Jakarta" })
 }
 
 export function dateSeeder(par: number = 0) {
   const date = new Date()
-  const sevenHoursInMs = 17 * 60 * 60 * 1000
+  const sevenHoursInMs = 7 * 60 * 60 * 1000
   const resultDate = new Date(date.getTime() - sevenHoursInMs)
   resultDate.setUTCDate(resultDate.getUTCDate() + par)
   resultDate.setUTCHours(17, 0, 0, 0)
 
   return resultDate.toISOString()
+}
+
+export function seederSetCheckout(par: number = 0) {
+  const date = new Date(dateSeeder(par))
+  date.setUTCHours(15, 0, 0, 0)
+  return date.toISOString()
+}
+
+export function seederSetCheckin(par: number = 0) {
+  const date = new Date(dateSeeder(par))
+  date.setUTCHours(9, 0, 0, 0)
+  return date.toISOString()
 }
 
 export function tesGetDate() {

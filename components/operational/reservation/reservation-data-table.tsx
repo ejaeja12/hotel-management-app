@@ -61,7 +61,7 @@ export function GroupedDataTable<TData extends RowData>({ data, columns }: DataT
   const [sorting, setSorting] = React.useState<SortingState>([])
   const [pagination, setPagination] = React.useState({
     pageIndex: 0,
-    pageSize: 10,
+    pageSize: 100,
   })
 
   const table = useTable({
@@ -144,7 +144,7 @@ export function GroupedDataTable<TData extends RowData>({ data, columns }: DataT
                 // group by date
                 const getValue = row.original as ReservationColumnType
                 return getValue.date !== undefined ? (
-                  <TableRow key={row.id} className="h-14 bg-muted/50">
+                  <TableRow key={row.id} className="h-18 bg-muted/50">
                     <TableCell colSpan={columns.length}>
                       <div key={row.id}>
                         <span className="pl-3 font-bold">{new Date(getValue.date).toDateString()}</span>

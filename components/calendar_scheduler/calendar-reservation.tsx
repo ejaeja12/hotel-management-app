@@ -11,6 +11,7 @@ import "@/components/css/scheduler_green.css"
 
 // dummy data
 import { dataTipeKamar, dataReservasi } from "./helper"
+import { reservationData } from "@/prisma/seeder/reservationSeeder"
 
 // Source : https://code.daypilot.org/79813/react-scheduler-with-horizontal-timeline-open-source
 
@@ -22,7 +23,36 @@ const colorSchedule = {
   ORANGE: "#EA580C",
 }
 
-export default function CalendarReservation() {
+type ReservationCalendar = {
+  id: string
+  guest: string
+  status: string
+  start: string
+  end: string
+  room: {
+    id: string
+  }
+}
+
+type RoomTypeCalendar = {
+  id: string
+  name: string
+  color: string
+  room: {
+    id: string
+    name: string
+  }[]
+}
+
+type Props = {
+  reservationData: ReservationCalendar[]
+  roomTypeData: RoomTypeCalendar[]
+}
+
+export default function CalendarReservation({ reservationData, roomTypeData }: Props) {
+  const reservations = setEventData(reservationData)
+  const roomType = setResourceScheduler(roomTypeData)
+
   const [scheduler, setScheduler] = useState<DayPilot.Scheduler>()
   const { resolvedTheme } = useTheme()
   const [innerHeight, setInnerheight] = useState(0)
@@ -58,24 +88,16 @@ export default function CalendarReservation() {
 
   const days = 365
 
-  const onEventDeleted: DayPilot.EventHandler<
-    DayPilot.SchedulerEventDeletedArgs
-  > = (args) => {
+  const onEventDeleted: DayPilot.EventHandler<DayPilot.SchedulerEventDeletedArgs> = (args) => {
     console.log("Event deleted: " + args.e.text())
   }
-  const onEventMoved: DayPilot.EventHandler<
-    DayPilot.SchedulerEventMovedArgs
-  > = (args) => {
+  const onEventMoved: DayPilot.EventHandler<DayPilot.SchedulerEventMovedArgs> = (args) => {
     console.log("Event moved: " + args.e.text())
   }
-  const onEventResized: DayPilot.EventHandler<
-    DayPilot.SchedulerEventResizedArgs
-  > = (args) => {
+  const onEventResized: DayPilot.EventHandler<DayPilot.SchedulerEventResizedArgs> = (args) => {
     console.log("Event resized: " + args.e.text())
   }
-  const onTimeRangeSelected: DayPilot.EventHandler<
-    DayPilot.SchedulerTimeRangeSelectedArgs
-  > = async (args) => {
+  const onTimeRangeSelected: DayPilot.EventHandler<DayPilot.SchedulerTimeRangeSelectedArgs> = async (args) => {
     const scheduler = args.control
     const modal = await DayPilot.Modal.prompt("Create a new event:", "Event 1")
     scheduler.clearSelection()
@@ -92,83 +114,14 @@ export default function CalendarReservation() {
   }
   const startDate = DayPilot.Date.today().firstDayOfYear()
   console.log(startDate)
-  const timeHeaders: DayPilot.TimeHeaderData[] = [
-    { groupBy: "Month" },
-    { format: "d", groupBy: "Day" },
-  ]
+  const timeHeaders: DayPilot.TimeHeaderData[] = [{ groupBy: "Month" }, { format: "d", groupBy: "Day" }]
 
   // const [events, setEvents] = useState<DayPilot.EventData[]>(() => {
   //   const sampleStart = DayPilot.Date.today()
-  //   return [
-  //     {
-  //       id: 1,
-  //       text: "Mr. Jhon Doe",
-  //       start: sampleStart.addHours(10),
-  //       end: sampleStart.addDays(2),
-  //       resource: "del-01",
-  //       backColor: colorSchedule.BLUE,
-  //     },
-  //     {
-  //       id: 2,
-  //       text: "Ms, Jane Doe",
-  //       start: sampleStart.addDays(-4),
-  //       end: sampleStart.addDays(-1),
-  //       resource: "R2",
-  //       backColor: colorSchedule.GREEN,
-  //     },
-  //     {
-  //       id: 3,
-  //       text: "Mrs. June Doe",
-  //       start: sampleStart.addHours(10),
-  //       end: sampleStart.addDays(+4),
-  //       resource: "R2",
-
-  //       backColor: colorSchedule.RED,
-  //     },
-  //     {
-  //       id: 4,
-  //       text: "Mrs. June Doe",
-  //       start: sampleStart.addDays(-9),
-  //       end: sampleStart.addDays(-3),
-  //       resource: "R4",
-  //       backColor: colorSchedule.PURPLE,
-  //     },
-  //   ]
+  //   return setEventData(dataReservasi)
   // })
 
-  const [events, setEvents] = useState<DayPilot.EventData[]>(() => {
-    const sampleStart = DayPilot.Date.today()
-    return setEventData(dataReservasi)
-  })
-
-  // const [resources, setResources] = useState<DayPilot.ResourceData[]>(() => [
-  //   { name: "Room 1", id: "R1" },
-  //   { name: "Room 2", id: "R2" },
-  //   { name: "Room 3", id: "R3" },
-  //   { name: "Room 4", id: "R4" },
-  // ])
-
-  // const [resources, setResources] = useState<DayPilot.ResourceData[]>(() => [
-  //   {
-  //     name: "Deluxe",
-  //     id: "del",
-  //     expanded: true,
-  //     type: "group",
-  //     children: [],
-  //     backColor: colorSchedule.BLUE,
-  //     html: "<h1 class='font-bold text-lg underline  text-center'>Deluxe</h1>",
-
-  //     borderColor: "black",
-  //   },
-  //   { name: "Deluxe 01", id: "R1" },
-  //   { name: "Room 2", id: "R2" },
-  //   { name: "Room 3", id: "R3" },
-  //   { name: "Room 4", id: "R4" },
-  // ])
-
-  const [resources, setResources] = useState<DayPilot.ResourceData[]>(() =>
-    setResourceScheduler(dataTipeKamar)
-  )
+  // const [resources, setResources] = useState<DayPilot.ResourceData[]>(() => setResourceScheduler(dataTipeKamar))
 
   return (
     <div ref={boxRef} style={{ userSelect: "none" }}>
@@ -199,8 +152,8 @@ export default function CalendarReservation() {
         startDate={startDate}
         timeHeaders={timeHeaders}
         timeRangeSelectedHandling={"Disabled"}
-        events={events}
-        resources={resources}
+        events={reservations}
+        resources={roomType}
         controlRef={setScheduler}
       />
     </div>

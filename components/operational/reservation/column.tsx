@@ -55,6 +55,7 @@ export type ReservationColumnType = {
   id?: string
   guestName?: string
   roomName?: string
+  roomColor?: string
   checkIn?: string
   checkOut?: string
   occupancyStatus?: string
@@ -90,7 +91,10 @@ export const columns = columnHelper.columns([
     header: "Room Number",
     cell: ({ row }) => (
       <div className="">
-        <span className="">{row.original.roomName}</span>
+        <Badge variant={"outline"} className="p-3" style={{ border: "2px solid", borderColor: row.original.roomColor }}>
+          {row.original.roomName}
+        </Badge>
+        {/* <span className="">{row.original.roomName}</span> */}
       </div>
     ),
   },

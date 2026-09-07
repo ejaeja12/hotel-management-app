@@ -81,9 +81,7 @@ function setTextColor(status: string) {
  * @param res
  * @returns Array <ResourceScheduler>
  */
-export function setResourceScheduler(
-  res: Array<RoomTypeWithRoom>
-): Array<ResourceScheduler> {
+export function setResourceScheduler(res: Array<RoomTypeWithRoom>): Array<ResourceScheduler> {
   const temp: Array<ResourceScheduler> = []
   res.map((item) => {
     const roomType = {
@@ -117,9 +115,7 @@ export function setResourceScheduler(
  * @returns Array <eventData>
  */
 
-export function setEventData(
-  arg: Array<Reservation>
-): Array<DayPilot.EventData> {
+export function setEventData(arg: Array<Reservation>): Array<DayPilot.EventData> {
   const result: Array<DayPilot.EventData> = []
   arg.map((res) => {
     const temp = {
